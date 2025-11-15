@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { Card, CardType, CardState } from '../types';
 import { POINTS, REMOVAL_COST_LADDER, DUPLICATION_COST_LADDER, INITIAL_CARDS } from '../constants';
@@ -111,8 +110,11 @@ const CombatantLayout: React.FC<CombatantLayoutProps> = ({ combatantIndex, histo
         score += POINTS.NEUTRAL_CARD;
       }
       if (card.type !== CardType.BASIC) {
-        if (card.state === CardState.EPIPHANY) score += POINTS.EPIPHANY_BONUS;
-        else if (card.state === CardState.DIVINE_EPIPHANY) score += POINTS.DIVINE_EPIPHANY_BONUS;
+        if (card.state === CardState.EPIPHANY && card.type !== CardType.UNIQUE) {
+          score += POINTS.EPIPHANY_BONUS;
+        } else if (card.state === CardState.DIVINE_EPIPHANY) {
+          score += POINTS.DIVINE_EPIPHANY_BONUS;
+        }
       }
     });
     score += conversionCount * POINTS.CONVERSION_COST;
