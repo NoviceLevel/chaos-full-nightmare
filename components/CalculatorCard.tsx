@@ -128,24 +128,15 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       backgroundPosition: 'center',
   } : {};
 
-  const titleColorWithImage = isLast
-    ? 'text-purple-300'
-    : {
-        [CardType.UNIQUE]: 'text-blue-300',
-        [CardType.NEUTRAL]: 'text-stone-300',
-        [CardType.MONSTER]: 'text-white',
-        [CardType.FORBIDDEN]: 'text-red-300',
-        [CardType.BASIC]: 'text-gray-300',
-      }[card.type];
-
-  const textShadowStyle = '[text-shadow:0_2px_4px_rgba(0,0,0,0.7)]';
-  const smallTextShadowStyle = '[text-shadow:0_1px_3px_rgba(0,0,0,0.7)]';
-
   return (
     <div 
       className={`${cardStyles.base} ${isLast ? cardStyles.ULTIMATE : cardStyles[card.type]} ${stateStyles[card.state]}`}
       style={backgroundStyle}
     >
+      {hasImage && (
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 rounded-lg"></div>
+      )}
+
       {card.type === CardType.NEUTRAL && (
         <div className="group absolute top-2 right-2 z-20">
           <button
@@ -163,13 +154,13 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
 
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="text-center min-h-[3rem]">
-          <p className={`font-bold text-sm sm:text-base ${hasImage ? `${titleColorWithImage} ${textShadowStyle}` : ''}`}>
+          <p className={`font-bold text-sm sm:text-base ${hasImage ? 'text-white' : ''}`}>
             {cardTitle}
           </p>
           <p className={`text-xs capitalize ${
             card.state === CardState.NONE
-              ? (hasImage ? `text-white/90 ${smallTextShadowStyle}` : 'opacity-50')
-              : (hasImage ? `text-white font-semibold ${smallTextShadowStyle}` : '')
+              ? (hasImage ? 'text-white/90' : 'opacity-50')
+              : (hasImage ? 'text-white font-semibold' : '')
           }`}>
             {card.state.replace('_', ' ')}
           </p>
