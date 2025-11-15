@@ -128,6 +128,19 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       backgroundPosition: 'center',
   } : {};
 
+  const titleColorWithImage = isLast
+    ? 'text-purple-300'
+    : {
+        [CardType.UNIQUE]: 'text-blue-300',
+        [CardType.NEUTRAL]: 'text-stone-300',
+        [CardType.MONSTER]: 'text-white',
+        [CardType.FORBIDDEN]: 'text-red-300',
+        [CardType.BASIC]: 'text-gray-300',
+      }[card.type];
+
+  const textShadowStyle = '[text-shadow:0_2px_4px_rgba(0,0,0,0.7)]';
+  const smallTextShadowStyle = '[text-shadow:0_1px_3px_rgba(0,0,0,0.7)]';
+
   return (
     <div 
       className={`${cardStyles.base} ${isLast ? cardStyles.ULTIMATE : cardStyles[card.type]} ${stateStyles[card.state]}`}
@@ -149,17 +162,17 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       )}
 
       <div className="relative z-10 flex flex-col justify-between h-full">
-        <div className="text-center min-h-[3rem] flex flex-col justify-center items-center">
-            <p className={`font-bold text-sm sm:text-base ${hasImage ? 'text-white drop-shadow-[0_1.5px_1px_rgba(0,0,0,0.8)]' : ''}`}>
-              {cardTitle}
-            </p>
-            <p className={`text-xs capitalize ${
-              hasImage
-                ? `text-white/90 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] ${card.state !== CardState.NONE ? 'font-semibold' : ''}`
-                : card.state === CardState.NONE ? 'opacity-50' : ''
-            }`}>
-              {card.state.replace('_', ' ')}
-            </p>
+        <div className="text-center min-h-[3rem]">
+          <p className={`font-bold text-sm sm:text-base ${hasImage ? `${titleColorWithImage} ${textShadowStyle}` : ''}`}>
+            {cardTitle}
+          </p>
+          <p className={`text-xs capitalize ${
+            card.state === CardState.NONE
+              ? (hasImage ? `text-white/90 ${smallTextShadowStyle}` : 'opacity-50')
+              : (hasImage ? `text-white font-semibold ${smallTextShadowStyle}` : '')
+          }`}>
+            {card.state.replace('_', ' ')}
+          </p>
         </div>
 
         <div className="flex-grow my-2 flex items-center justify-center min-h-0">
