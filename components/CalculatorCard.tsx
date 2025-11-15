@@ -127,6 +127,23 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
   } : {};
+  
+  const titleColorStylesWithImage = {
+    [CardType.BASIC]: 'text-gray-200',
+    [CardType.UNIQUE]: 'text-sky-400',
+    [CardType.NEUTRAL]: 'text-stone-300',
+    [CardType.MONSTER]: 'text-fuchsia-400',
+    [CardType.FORBIDDEN]: 'text-red-500',
+    ULTIMATE: 'text-violet-400',
+  };
+
+  const getTitleClassName = () => {
+    if (!hasImage) {
+      return '';
+    }
+    const colorClass = isLast ? titleColorStylesWithImage.ULTIMATE : titleColorStylesWithImage[card.type];
+    return `${colorClass}`;
+  };
 
   return (
     <div 
@@ -134,7 +151,7 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       style={backgroundStyle}
     >
       {hasImage && (
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7)_0%,transparent_10%,transparent_60%,rgba(0,0,0,0.7)_100%)] rounded-lg"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.3)_0%,transparent_15%,transparent_60%,rgba(0,0,0,0.5)_100%)] rounded-lg"></div>
       )}
 
       {card.type === CardType.NEUTRAL && (
@@ -154,7 +171,7 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
 
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="text-center min-h-[3rem]">
-          <p className={`font-bold text-sm sm:text-base ${hasImage ? 'text-white' : ''}`}>
+          <p className={`font-bold text-sm sm:text-base ${getTitleClassName()}`}>
             {cardTitle}
           </p>
           <p className={`text-xs capitalize ${
