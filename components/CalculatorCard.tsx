@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardEffect, CardState, CardType } from '../types';
 import { ArrowPathIcon, DivineEpiphanyIcon, EpiphanyIcon, MinusCircleIcon, Square2StackIcon, XIcon } from './Icons';
@@ -124,18 +123,18 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
   const hasImage = !!card.imageUrl;
 
   const backgroundStyle = hasImage ? {
-      backgroundImage: `transparent, url(${card.imageUrl})`,
+      backgroundImage: `url(${card.imageUrl})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
   } : {};
 
-  const imageTextClasses = hasImage ? 'text-black': '';
-
   return (
     <div 
-      className={`${cardStyles.base} ${isLast ? cardStyles.ULTIMATE : cardStyles[card.type]} ${stateStyles[card.state]} ${imageTextClasses}`}
+      className={`${cardStyles.base} ${isLast ? cardStyles.ULTIMATE : cardStyles[card.type]} ${stateStyles[card.state]}`}
       style={backgroundStyle}
     >
+      {hasImage && <div className="absolute inset-0 bg-black/40 rounded-lg pointer-events-none"></div>}
+      
       {card.type === CardType.NEUTRAL && (
         <div className="group absolute top-2 right-2 z-20">
           <button
@@ -150,47 +149,50 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
           </div>
         </div>
       )}
-      <div className="text-center min-h-[3rem]">
-        <p className="font-bold text-sm sm:text-base">{cardTitle}</p>
-        <p className={`text-xs capitalize ${card.state === CardState.NONE ? 'opacity-50' : ''}`}>
-          {card.state.replace('_', ' ')}
-        </p>
-      </div>
 
-      <div className="flex-grow my-2 flex items-center justify-center min-h-0">
-        {/* This div is now just for spacing, keeping the layout consistent */}
-      </div>
-      
-      <div className="flex flex-col gap-1.5">
-        {!isEpiphanyDisabled && (
+      <div className={`relative z-10 flex flex-col justify-between h-full ${hasImage ? 'text-white' : ''}`}>
+        <div className="text-center min-h-[3rem]">
+          <p className="font-bold text-sm sm:text-base">{cardTitle}</p>
+          <p className={`text-xs capitalize ${card.state === CardState.NONE ? (hasImage ? 'opacity-75' : 'opacity-50') : ''}`}>
+            {card.state.replace('_', ' ')}
+          </p>
+        </div>
+
+        <div className="flex-grow my-2 flex items-center justify-center min-h-0">
+          {/* This div is now just for spacing, keeping the layout consistent */}
+        </div>
+        
+        <div className="flex flex-col gap-1.5">
+          {!isEpiphanyDisabled && (
+            <div className="grid grid-cols-2 gap-1.5">
+              <ActionButton 
+                label="Epiphany"
+                color="bg-yellow-500 text-black"
+                onClick={() => handleStateChange(CardState.EPIPHANY)}
+                icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
+                textSize={buttonTextSize}
+                disabled={isStateLocked}
+                showLabel={showLabel}
+              />
+              <ActionButton 
+                label="Divine"
+                color="bg-cyan-500 text-black"
+                onClick={() => handleStateChange(CardState.DIVINE_EPIPHANY)}
+                icon={<DivineEpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
+                textSize={buttonTextSize}
+                disabled={isStateLocked}
+                showLabel={showLabel}
+              />
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-1.5">
-            <ActionButton 
-              label="Epiphany"
-              color="bg-yellow-500 text-black"
-              onClick={() => handleStateChange(CardState.EPIPHANY)}
-              icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
-              textSize={buttonTextSize}
-              disabled={isStateLocked}
-              showLabel={showLabel}
-            />
-            <ActionButton 
-              label="Divine"
-              color="bg-cyan-500 text-black"
-              onClick={() => handleStateChange(CardState.DIVINE_EPIPHANY)}
-              icon={<DivineEpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
-              textSize={buttonTextSize}
-              disabled={isStateLocked}
-              showLabel={showLabel}
-            />
+            {actionButtons.map((button, index) => {
+              if (actionButtons.length % 2 !== 0 && index === actionButtons.length - 1) {
+                return React.cloneElement(button, { className: 'col-span-2' });
+              }
+              return button;
+            })}
           </div>
-        )}
-        <div className="grid grid-cols-2 gap-1.5">
-          {actionButtons.map((button, index) => {
-            if (actionButtons.length % 2 !== 0 && index === actionButtons.length - 1) {
-              return React.cloneElement(button, { className: 'col-span-2' });
-            }
-            return button;
-          })}
         </div>
       </div>
     </div>
