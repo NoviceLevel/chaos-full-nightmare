@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardEffect, CardState, CardType } from '../types';
-import { ArrowPathIcon, MinusCircleIcon, SparklesIcon, Square2StackIcon, StarIcon, XIcon } from './Icons';
+import { ArrowPathIcon, DivineEpiphanyIcon, EpiphanyIcon, MinusCircleIcon, Square2StackIcon, XIcon } from './Icons';
 
 interface CalculatorCardProps {
   card: Card;
@@ -12,6 +12,7 @@ interface CalculatorCardProps {
   onConvert: (cardId: number) => void;
   onDiscard: (cardId: number) => void;
   buttonTextSize: number;
+  combatantCount: number;
 }
 
 const cardStyles = {
@@ -31,7 +32,7 @@ const stateStyles = {
 };
 
 const buttonStyles = {
-  base: 'font-semibold py-1.5 px-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center justify-center gap-1.5',
+  base: 'font-semibold py-1.5 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center justify-center gap-1.5',
   enabled: 'hover:bg-opacity-80',
   disabled: 'opacity-50 cursor-not-allowed',
 };
@@ -44,22 +45,24 @@ const ActionButton: React.FC<{
   textSize: number;
   disabled?: boolean;
   className?: string;
-}> = ({ onClick, label, color, disabled = false, icon, textSize, className }) => (
+  showLabel: boolean;
+}> = ({ onClick, label, color, disabled = false, icon, textSize, className, showLabel }) => (
   <button
     onClick={onClick}
     disabled={disabled}
     style={{ fontSize: `${textSize}px` }}
     className={`${buttonStyles.base} ${color} ${
       disabled ? buttonStyles.disabled : buttonStyles.enabled
-    } ${className || ''}`}
+    } ${showLabel ? 'px-2' : 'px-1.5'} ${className || ''}`}
   >
     {icon}
-    <span className="min-w-0 truncate">{label}</span>
+    {showLabel && <span className="min-w-0 truncate">{label}</span>}
   </button>
 );
 
 
-const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize }) => {
+const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize, combatantCount }) => {
+  const showLabel = combatantCount === 1;
   const isEpiphanyDisabled = card.type === CardType.BASIC || isLast;
   const isDuplicatable = card.type !== CardType.BASIC && !card.effects?.includes(CardEffect.UNIQUE);
   const isStateLocked = card.state === CardState.EPIPHANY || card.state === CardState.DIVINE_EPIPHANY;
@@ -90,6 +93,7 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       disabled={card.type === CardType.NEUTRAL}
       icon={<ArrowPathIcon className="w-4 h-4 flex-shrink-0" />}
       textSize={buttonTextSize}
+      showLabel={showLabel}
     />
   );
   if (isDuplicatable) {
@@ -101,6 +105,7 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
         onClick={() => onDuplicate(card)}
         icon={<Square2StackIcon className="w-4 h-4 flex-shrink-0" />}
         textSize={buttonTextSize}
+        showLabel={showLabel}
       />
     );
   }
@@ -112,18 +117,19 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
       onClick={() => onRemove(card.id)}
       icon={<MinusCircleIcon className="w-4 h-4 flex-shrink-0" />}
       textSize={buttonTextSize}
+      showLabel={showLabel}
     />
   );
   
   const hasImage = !!card.imageUrl;
 
   const backgroundStyle = hasImage ? {
-      backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%), url("${card.imageUrl}")`,
+      backgroundImage: `transparent, url(${card.imageUrl})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
   } : {};
 
-  const imageTextClasses = hasImage ? 'text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.6)]' : '';
+  const imageTextClasses = hasImage ? 'text-black': '';
 
   return (
     <div 
@@ -162,17 +168,19 @@ const CalculatorCard: React.FC<CalculatorCardProps> = ({ card, isLast, onUpdate,
               label="Epiphany"
               color="bg-yellow-500 text-black"
               onClick={() => handleStateChange(CardState.EPIPHANY)}
-              icon={<StarIcon className="w-4 h-4 flex-shrink-0" />}
+              icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
               textSize={buttonTextSize}
               disabled={isStateLocked}
+              showLabel={showLabel}
             />
             <ActionButton 
               label="Divine"
               color="bg-cyan-500 text-black"
               onClick={() => handleStateChange(CardState.DIVINE_EPIPHANY)}
-              icon={<SparklesIcon className="w-4 h-4 flex-shrink-0" />}
+              icon={<DivineEpiphanyIcon className="w-4 h-4 flex-shrink-0" />}
               textSize={buttonTextSize}
               disabled={isStateLocked}
+              showLabel={showLabel}
             />
           </div>
         )}

@@ -5,7 +5,6 @@ import { POINTS, REMOVAL_COST_LADDER, DUPLICATION_COST_LADDER } from '../constan
 import { GameState, getLadderCost, getInitialGameState } from '../state';
 import CalculatorCard from './CalculatorCard';
 import ScoreDisplay from './ScoreDisplay';
-import { cardImageColors, generateDummyImage } from '../database';
 
 interface CombatantLayoutProps {
   combatantIndex: number;
@@ -130,14 +129,12 @@ const CombatantLayout: React.FC<CombatantLayoutProps> = ({
 
   const handleAddCard = (type: CardType) => {
     const updater = (current: GameState) => {
-      const cardName = `${capitalize(type)} Card`;
       const newCard: Card = {
         id: current.nextId,
         type: type,
         originalType: type,
         state: CardState.NONE,
-        name: cardName,
-        imageUrl: generateDummyImage(cardName, cardImageColors[type])
+        name: `${capitalize(type)} Card`
       };
       return {
         cards: [...current.cards, newCard],
@@ -179,13 +176,7 @@ const CombatantLayout: React.FC<CombatantLayoutProps> = ({
     
     const updater = (current: GameState) => ({
       cards: current.cards.map(card =>
-        card.id === cardId ? { 
-          ...card, 
-          type: CardType.NEUTRAL, 
-          state: CardState.NONE, 
-          name: 'Neutral Card',
-          imageUrl: generateDummyImage('Neutral Card', cardImageColors[CardType.NEUTRAL]) 
-        } : card
+        card.id === cardId ? { ...card, type: CardType.NEUTRAL, state: CardState.NONE, name: 'Neutral Card' } : card
       ),
       conversionCount: current.conversionCount + 1,
     });
@@ -225,6 +216,7 @@ const CombatantLayout: React.FC<CombatantLayoutProps> = ({
       const newCard: Card = {
         ...cardToDuplicate,
         id: current.nextId,
+        state: CardState.NONE, 
         isUltimate: false,
         isDuplicate: true,
       };
@@ -286,6 +278,7 @@ const CombatantLayout: React.FC<CombatantLayoutProps> = ({
               onConvert={handleConvertCard}
               onDiscard={handleDiscardCard}
               buttonTextSize={buttonTextSize}
+              combatantCount={combatantCount}
             />
           ))}
           <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
