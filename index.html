@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Save Data Calculator</title>
     <meta name="theme-color" content="#06b6d4" />
-    <meta name="description" content="A calculator to determine the points for a save data configuration based on a complex set of rules including card types, states, duplications, removals, and conversions." />
+    <meta name="description" content="Chaos Zero Night save data tracker." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -245,17 +245,47 @@
           { id: 7, type: CardType.UNIQUE, name: 'Sir Kowalski', imageUrl: './cards/veronica-7.png' },
           { id: 8, type: CardType.UNIQUE, name: 'Bombardment Prep', isUltimate: true, imageUrl: './cards/veronica-8.png' },
       ];
+      const BERYL_DECK_DATA = [
+          { id: 1, type: CardType.BASIC, name: 'Launcher',  imageUrl: './cards/beryl-1.png' },
+          { id: 2, type: CardType.BASIC, name: 'Charge Launcher',  imageUrl: './cards/beryl-2.png' },
+          { id: 3, type: CardType.BASIC, name: 'Barrier',  imageUrl: './cards/beryl-3.png' },
+          { id: 4, type: CardType.UNIQUE, name: 'Opening Found',  imageUrl: './cards/beryl-4.png' },
+          { id: 5, type: CardType.UNIQUE, name: 'Charged Shot',  imageUrl: './cards/beryl-5.png' },
+          { id: 6, type: CardType.UNIQUE, name: 'Guilty Pleasure',  imageUrl: './cards/beryl-6.png' },
+          { id: 7, type: CardType.UNIQUE, name: 'Unlimited Firepower',  imageUrl: './cards/beryl-7.png' },
+          { id: 8, type: CardType.UNIQUE, name: 'Heavy Weapons Specialist', isUltimate: true, imageUrl: './cards/beryl-8.png' },
+      ];
       const DEFAULT_DECK = createDeckFromData(DEFAULT_DECK_DATA);
       const MIKA_DECK = createDeckFromData(MIKA_DECK_DATA);
       const HARU_DECK = createDeckFromData(HARU_DECK_DATA);
       const RENOA_DECK = createDeckFromData(RENOA_DECK_DATA);
       const VERONICA_DECK = createDeckFromData(VERONICA_DECK_DATA);
+      const BERYL_DECK = createDeckFromData(BERYL_DECK_DATA);
       const COMBATANTS = [
           { id: 'default', name: 'Default', deck: DEFAULT_DECK },
           { id: 'mika', name: 'Mika', deck: MIKA_DECK },
           { id: 'haru', name: 'Haru', deck: HARU_DECK },
           { id: 'renoa', name: 'Renoa', deck: RENOA_DECK },
           { id: 'veronica', name: 'Veronica', deck: VERONICA_DECK },
+          { id: 'rin', name: '', deck: RIN_DECK },
+          { id: 'orlea', name: '', deck: ORLEA_DECK },
+          { id: 'kayron', name: '', deck: KAYRON_DECK },
+          { id: 'meilin', name: '', deck: MEILIN_DECK },
+          { id: 'magna', name: '', deck: MAGNA_DECK },
+          { id: 'hugo', name: '', deck: HUGO_DECK },
+          { id: 'khalipe', name: '', deck: KHALIPE_DECK },
+          { id: 'luke', name: '', deck: LUKE_DECK },
+          { id: 'selena', name: '', deck: SELENA_DECK },
+          { id: 'tressa', name: '', deck: TRESSA_DECK },
+          { id: 'rei', name: '', deck: REI_DECK },
+          { id: 'nia', name: '', deck: NIA_DECK },
+          { id: 'amir', name: '', deck: AMIR_DECK },
+          { id: 'cassius', name: '', deck: CASSIUS_DECK },
+          { id: 'lucas', name: '', deck: LUCAS_DECK },
+          { id: 'beryl', name: '', deck: BERYL_DECK },
+          { id: 'maribell', name: '', deck: MARIBELL_DECK },
+          { id: 'owen', name: '', deck: OWEN_DECK },
+          { id: 'yuki', name: '', deck: YUKI_DECK },
       ];
       
       // --- From state.ts ---
