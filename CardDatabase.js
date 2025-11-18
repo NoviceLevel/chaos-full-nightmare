@@ -280,6 +280,35 @@ const YUKI_DECK_DATA = [
     { id: 7, type: CardType.UNIQUE, name: 'Freezing Blade', nameZh: '冰冻之刃', imageUrl: './cards/yuki-7.webp', effects: [CardEffect.UNIQUE] },
     { id: 8, type: CardType.UNIQUE, name: 'Iceberg Cleave', nameZh: '冰山劈斩', imageUrl: './cards/yuki-8.webp', isUltimate: true },
 ];
+const MONSTER_DECK_DATA = [
+    { id: 1, type: CardType.MONSTER, name: 'Monster 1', nameZh: '怪物1', imageUrl: './cards/monster-1.webp' },
+    { id: 2, type: CardType.MONSTER, name: 'Monster 2', nameZh: '怪物2', imageUrl: './cards/monster-2.webp' },
+    { id: 3, type: CardType.MONSTER, name: 'Monster 3', nameZh: '怪物3', imageUrl: './cards/monster-3.webp' },
+    { id: 4, type: CardType.MONSTER, name: 'Monster 4', nameZh: '怪物4', imageUrl: './cards/monster-4.webp' },
+    { id: 5, type: CardType.MONSTER, name: 'Monster 5', nameZh: '怪物5', imageUrl: './cards/monster-5.webp' },
+    { id: 6, type: CardType.MONSTER, name: 'Monster 6', nameZh: '怪物6', imageUrl: './cards/monster-6.webp' },
+    { id: 7, type: CardType.MONSTER, name: 'Monster 7', nameZh: '怪物7', imageUrl: './cards/monster-7.webp' },
+    { id: 8, type: CardType.MONSTER, name: 'Monster 8', nameZh: '怪物8', imageUrl: './cards/monster-8.webp' },
+    { id: 9, type: CardType.MONSTER, name: 'Monster 9', nameZh: '怪物9', imageUrl: './cards/monster-9.webp' },
+    { id: 10, type: CardType.MONSTER, name: 'Monster 10', nameZh: '怪物10', imageUrl: './cards/monster-10.webp' },
+    { id: 11, type: CardType.MONSTER, name: 'Monster 11', nameZh: '怪物11', imageUrl: './cards/monster-11.webp' },
+    { id: 12, type: CardType.MONSTER, name: 'Monster 12', nameZh: '怪物12', imageUrl: './cards/monster-12.webp' },
+    { id: 13, type: CardType.MONSTER, name: 'Monster 13', nameZh: '怪物13', imageUrl: './cards/monster-13.webp' },
+    { id: 14, type: CardType.MONSTER, name: 'Monster 14', nameZh: '怪物14', imageUrl: './cards/monster-14.webp' },
+    { id: 15, type: CardType.MONSTER, name: 'Monster 15', nameZh: '怪物15', imageUrl: './cards/monster-15.webp' },
+    { id: 16, type: CardType.MONSTER, name: 'Monster 16', nameZh: '怪物16', imageUrl: './cards/monster-16.webp' },
+    { id: 17, type: CardType.MONSTER, name: 'Monster 17', nameZh: '怪物17', imageUrl: './cards/monster-17.webp' },
+    { id: 18, type: CardType.MONSTER, name: 'Monster 18', nameZh: '怪物18', imageUrl: './cards/monster-18.webp' },
+    { id: 19, type: CardType.MONSTER, name: 'Monster 19', nameZh: '怪物19', imageUrl: './cards/monster-19.webp' },
+    { id: 20, type: CardType.MONSTER, name: 'Monster 20', nameZh: '怪物20', imageUrl: './cards/monster-20.webp' },
+    { id: 21, type: CardType.MONSTER, name: 'Monster 21', nameZh: '怪物21', imageUrl: './cards/monster-21.webp' },
+    { id: 22, type: CardType.MONSTER, name: 'Monster 22', nameZh: '怪物22', imageUrl: './cards/monster-22.webp' },
+    { id: 23, type: CardType.MONSTER, name: 'Monster 23', nameZh: '怪物23', imageUrl: './cards/monster-23.webp' },
+    { id: 24, type: CardType.MONSTER, name: 'Monster 24', nameZh: '怪物24', imageUrl: './cards/monster-24.webp' },
+    { id: 25, type: CardType.MONSTER, name: 'Monster 25', nameZh: '怪物25', imageUrl: './cards/monster-25.webp' },
+    { id: 26, type: CardType.MONSTER, name: 'Monster 26', nameZh: '怪物26', imageUrl: './cards/monster-26.webp' },
+    { id: 27, type: CardType.MONSTER, name: 'Monster 27', nameZh: '怪物27', imageUrl: './cards/monster-27.webp' },
+];
 const DEFAULT_DECK = createDeckFromData(DEFAULT_DECK_DATA);
 const AMIR_DECK = createDeckFromData(AMIR_DECK_DATA);
 const MIKA_DECK = createDeckFromData(MIKA_DECK_DATA);
@@ -304,6 +333,7 @@ const REI_DECK = createDeckFromData(REI_DECK_DATA);
 const SELENA_DECK = createDeckFromData(SELENA_DECK_DATA);
 const TRESSA_DECK = createDeckFromData(TRESSA_DECK_DATA);
 const YUKI_DECK = createDeckFromData(YUKI_DECK_DATA);
+const MONSTER_DECK = createDeckFromData(MONSTER_DECK_DATA);
 const COMBATANTS = [
     { id: 'default', name: 'Default', nameZh: '默认', deck: DEFAULT_DECK },
     { id: 'amir', name: 'Amir', nameZh: '艾美', deck: AMIR_DECK },
