@@ -322,7 +322,7 @@
                 {showLabel && <p className={`font-bold text-xs sm:text-sm md:text-base ${getTitleClassName()}`}>{cardTitle}</p>}
               </div>
               <div className="flex-grow my-1 sm:my-2 flex items-center justify-center min-h-0"></div>
-              <div className="flex flex-col gap-1 sm:gap-1.5 pb-1">
+              <div className="flex flex-col gap-1 sm:gap-1.5 mb-1 sm:mb-2">
                 {!isEpiphanyDisabled && (
                   <div className="grid grid-cols-2 gap-1.5">
                     <TooltipActionButton points={pointPreviews.epiphany} label="Epiphany" color="bg-yellow-500 text-black" onClick={() => handleStateChange(CardState.EPIPHANY)} icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />} textSize={buttonTextSize} disabled={isStateLocked} showLabel={showLabel} />
