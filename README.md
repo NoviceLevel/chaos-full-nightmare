@@ -1,4 +1,19 @@
-Future plan if I continue this project:
+# Chaos Full Nightmare Calculator
+
+A web-based save data calculator and deck builder for Chaos Zero Night game.
+
+## Screenshots
+
+### Character Selection
+![Character Selection](selet.png)
+
+### Monster Cards
+![Monster Cards](monster.png)
+
+### Neutral Cards
+![Neutral Cards](Neutral%20.png)
+
+## Future plan if I continue this project:
 
 - 100% Flip the image when duplicated
 - 100% Add Eiphany icon
