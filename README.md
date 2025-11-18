@@ -9,7 +9,7 @@ Future plan if I continue this project:
 - 100% Add cookie to remember preset team and so you don't have to manual select combatant everytime (using localStorage)
 - 100% Live calcuation on hover button shat show how much points will be added
 - 100% Add current points of each card
-- 0% Add neutral card database
+- 100% Add neutral card database with card selection UI
 - 100% Add monster card database with card selection UI
 - 100% Add Chinese translation (nameZh) for all character cards
 - 100% Scale down and fix layout size. Make 3 layout viewable in 1280x720p

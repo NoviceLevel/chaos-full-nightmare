@@ -721,6 +721,8 @@
         const [isTierSelectorOpen, setIsTierSelectorOpen] = React.useState(false);
         const [isCombatantSelectorOpen, setIsCombatantSelectorOpen] = React.useState(false);
         const [isPresetSelectorOpen, setIsPresetSelectorOpen] = React.useState(false);
+        const [isSavePresetDialogOpen, setIsSavePresetDialogOpen] = React.useState(false);
+        const [presetNameInput, setPresetNameInput] = React.useState('');
         const [buttonTextSize, setButtonTextSize] = React.useState(12);
         const [theme, setTheme] = React.useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         const [language, setLanguage] = React.useState(() => localStorage.getItem('language') || 'en');
@@ -848,17 +850,21 @@
         };
         const handleSavePreset = () => {
           if (combatantCount !== 3) return;
-          const name = prompt("Enter a name for this team preset:");
-          if (!name || name.trim() === '') {
-            alert("Preset name cannot be empty.");
+          setPresetNameInput('');
+          setIsSavePresetDialogOpen(true);
+        };
+        const handleConfirmSavePreset = () => {
+          const name = presetNameInput.trim();
+          if (!name) {
             return;
           }
           if (presets.some(p => p.name === name)) {
-            alert(`A preset with the name "${name}" already exists.`);
             return;
           }
           const newPreset = { name, combatantIds: selectedCombatants };
           setPresets(prev => [...prev, newPreset].sort((a, b) => a.name.localeCompare(b.name)));
+          setIsSavePresetDialogOpen(false);
+          setPresetNameInput('');
         };
         const handleLoadPreset = (presetName) => {
           if (presetName === 'none') return;
