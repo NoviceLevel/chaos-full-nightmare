@@ -56,7 +56,7 @@ const MIKA_DECK_DATA = [
     { id: 5, type: CardType.UNIQUE, name: 'Blessing of Waves', imageUrl: './cards/mika-5.webp' },
     { id: 6, type: CardType.UNIQUE, name: 'Tactical Analysis', imageUrl: './cards/mika-6.webp' },
     { id: 7, type: CardType.UNIQUE, name: 'Whirlpool', imageUrl: './cards/mika-7.webp' },
-    { id: 8, type: CardType.UNIQUE, name: 'Deluge', isUltimate: true, imageUrl: './cards/mika-8.webp' },
+    { id: 8, type: CardType.UNIQUE, name: 'Deluge', isUltimate: true, imageUrl: './cards/mika-8.webp', effects: [CardEffect.UNIQUE] },
 ];
 const HARU_DECK_DATA = [
     { id: 1, type: CardType.BASIC, name: 'Anchor', imageUrl: './cards/haru-1.webp' },
@@ -82,7 +82,7 @@ const VERONICA_DECK_DATA = [
     { id: 1, type: CardType.BASIC, name: 'Rapid Fire', imageUrl: './cards/veronica-1.webp' },
     { id: 2, type: CardType.BASIC, name: 'Rapid Fire', imageUrl: './cards/veronica-1.webp' },
     { id: 3, type: CardType.BASIC, name: 'Illusion of Golden Daffodils', imageUrl: './cards/veronica-3.webp' },
-    { id: 4, type: CardType.UNIQUE, name: 'Firing Preparation', imageUrl: './cards/veronica-4.webp' },
+    { id: 4, type: CardType.UNIQUE, name: 'Firing Preparation', imageUrl: './cards/veronica-4.webp', effects: [CardEffect.UNIQUE] },
     { id: 5, type: CardType.UNIQUE, name: 'Repose', imageUrl: './cards/veronica-5.webp' },
     { id: 6, type: CardType.UNIQUE, name: 'Pendant of Resolution', imageUrl: './cards/veronica-6.webp' },
     { id: 7, type: CardType.UNIQUE, name: 'Sir Kowalski', imageUrl: './cards/veronica-7.webp' },
@@ -106,7 +106,7 @@ const LUKE_DECK_DATA = [
     { id: 5, type: CardType.UNIQUE, name: 'Stealth Reload', imageUrl: './cards/luke-5.webp' },
     { id: 6, type: CardType.UNIQUE, name: 'Seize the Opportunity', imageUrl: './cards/luke-6.webp' },
     { id: 7, type: CardType.UNIQUE, name: 'Dance of the Demon', imageUrl: './cards/luke-7.webp' },
-    { id: 8, type: CardType.UNIQUE, name: 'Finisher Round', imageUrl: './cards/luke-8.webp', isUltimate: true },
+    { id: 8, type: CardType.UNIQUE, name: 'Finisher Round', imageUrl: './cards/luke-8.webp', isUltimate: true, effects: [CardEffect.UNIQUE] },
 ];
 const KHALIPE_DECK_DATA = [
     { id: 1, type: CardType.BASIC, name: 'Lashing', imageUrl: './cards/khalipe-1.webp' },
@@ -176,7 +176,7 @@ const HUGO_DECK_DATA = [
     { id: 5, type: CardType.UNIQUE, name: 'Fan of Daggers', imageUrl: './cards/hugo-5.webp' },
     { id: 6, type: CardType.UNIQUE, name: 'Quick Fix', imageUrl: './cards/hugo-6.webp' },
     { id: 7, type: CardType.UNIQUE, name: 'Dingo Howling', imageUrl: './cards/hugo-7.webp' },
-    { id: 8, type: CardType.UNIQUE, name: "Fixer's Approach", imageUrl: './cards/hugo-8.webp', isUltimate: true },
+    { id: 8, type: CardType.UNIQUE, name: "Fixer's Approach", imageUrl: './cards/hugo-8.webp', isUltimate: true, effects: [CardEffect.UNIQUE] },
 ];
 const KAYRON_DECK_DATA = [
     { id: 1, type: CardType.BASIC, name: 'Futility', imageUrl: './cards/kayron-1.webp' },
@@ -275,7 +275,7 @@ const YUKI_DECK_DATA = [
     { id: 4, type: CardType.UNIQUE, name: 'Prepare to Subdue', imageUrl: './cards/yuki-4.webp' },
     { id: 5, type: CardType.UNIQUE, name: 'Flash Slash', imageUrl: './cards/yuki-5.webp' },
     { id: 6, type: CardType.UNIQUE, name: 'Trickery Strike', imageUrl: './cards/yuki-6.webp' },
-    { id: 7, type: CardType.UNIQUE, name: 'Freezing Blade', imageUrl: './cards/yuki-7.webp' },
+    { id: 7, type: CardType.UNIQUE, name: 'Freezing Blade', imageUrl: './cards/yuki-7.webp', effects: [CardEffect.UNIQUE] },
     { id: 8, type: CardType.UNIQUE, name: 'Iceberg Cleave', imageUrl: './cards/yuki-8.webp', isUltimate: true },
 ];
 const DEFAULT_DECK = createDeckFromData(DEFAULT_DECK_DATA);
