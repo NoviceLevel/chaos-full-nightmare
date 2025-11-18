@@ -484,24 +484,27 @@
             'update': '更新',
             'duplicate': '复制',
             'convert': '转换',
-            'to': '到',
-            'from': '从',
-            'by': '通过',
-            'effect': '效果',
-            'Card': '卡',
-            'Neutral': '中立',
-            'Monster': '怪物',
-            'Forbidden': '禁忌',
-            'Unique': '独特',
-            'Ultimate': '终极',
-            'Epiphany': '顿悟',
-            'Divine Epiphany': '神圣顿悟',
-            '[Remove]': '[移除]'
+            'Epiphany to': '顿悟到',
+            'Divine Epiphany to': '神圣顿悟到',
+            'remove Epiphany from': '移除顿悟从',
+            'remove Divine Epiphany from': '移除神圣顿悟从',
+            'convert': '转换',
+            ' to Neutral': '到中立',
+            ' Card': '卡',
+            'Neutral Card': '中立卡',
+            'Monster Card': '怪物卡',
+            'Forbidden Card': '禁忌卡',
+            'Unique Card': '独特卡',
+            'Ultimate Card': '终极卡',
+            'by \\[Remove\\] effect': '通过[移除]效果'
           };
           
           let translated = desc;
-          Object.entries(translations).forEach(([en, zh]) => {
-            const regex = new RegExp(en, 'gi');
+          // 先处理长短语，避免部分匹配
+          const sortedEntries = Object.entries(translations).sort((a, b) => b[0].length - a[0].length);
+          sortedEntries.forEach(([en, zh]) => {
+            // 使用单词边界匹配，但允许空格和标点
+            const regex = new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
             translated = translated.replace(regex, zh);
           });
           return translated;
