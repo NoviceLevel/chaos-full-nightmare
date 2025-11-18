@@ -236,14 +236,14 @@
           [CardState.DIVINE_EPIPHANY]: 'border-cyan-500 dark:border-cyan-400 shadow-cyan-500/40 dark:shadow-cyan-400/30 shadow-[0_0_15px]',
         };
         const buttonStyles = {
-          base: 'w-full font-semibold py-1.5 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center justify-center gap-1.5',
+          base: 'py-1 sm:py-1.5 rounded-md font-semibold transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-1.5 min-w-0',
           enabled: 'hover:bg-opacity-80',
           disabled: 'opacity-50 cursor-not-allowed',
         };
         const ActionButton = ({ onClick, label, color, icon, textSize, disabled = false, className, showLabel }) => (
-          <button onClick={onClick} disabled={disabled} style={{ fontSize: `${textSize}px` }} className={`${buttonStyles.base} ${color} ${ disabled ? buttonStyles.disabled : buttonStyles.enabled } ${showLabel ? 'px-2' : 'px-1.5'} ${className || ''}`}>
+          <button onClick={onClick} disabled={disabled} style={{ fontSize: `${Math.max(textSize * 0.85, 10)}px` }} className={`${buttonStyles.base} ${color} ${ disabled ? buttonStyles.disabled : buttonStyles.enabled } ${showLabel ? 'px-1.5 sm:px-2' : 'px-1 sm:px-1.5'} ${className || ''}`}>
             {icon}
-            {showLabel && <span className="min-w-0 truncate">{label}</span>}
+            {showLabel && <span className="min-w-0 truncate text-[10px] sm:text-xs">{label}</span>}
           </button>
         );
         const TooltipActionButton = ({ points, onClick, label, color, icon, textSize, disabled = false, className, showLabel }) => {
@@ -322,7 +322,7 @@
                 {showLabel && <p className={`font-bold text-sm sm:text-base ${getTitleClassName()}`}>{cardTitle}</p>}
               </div>
               <div className="flex-grow my-2 flex items-center justify-center min-h-0"></div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1 sm:gap-1.5">
                 {!isEpiphanyDisabled && (
                   <div className="grid grid-cols-2 gap-1.5">
                     <TooltipActionButton points={pointPreviews.epiphany} label="Epiphany" color="bg-yellow-500 text-black" onClick={() => handleStateChange(CardState.EPIPHANY)} icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />} textSize={buttonTextSize} disabled={isStateLocked} showLabel={showLabel} />
