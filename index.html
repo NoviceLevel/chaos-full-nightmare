@@ -381,14 +381,22 @@
         };
         const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
         const formatStateName = (s) => s.replace(/_/g, ' ').split(' ').map(capitalize).join(' ');
-        const getCardBaseName = (card) => {
+        const getCardBaseName = (card, lang = 'en') => {
+          if (lang === 'zh' && card.nameZh) return card.nameZh;
           if (card.name) return card.name;
+          if (lang === 'zh') {
+            const typeNames = { basic: '基础', unique: '独特', neutral: '中立', monster: '怪物', forbidden: '禁忌' };
+            return `${card.isUltimate ? '终极' : typeNames[card.type] || capitalize(card.type)}卡`;
+          }
           return `${card.isUltimate ? 'Ultimate' : capitalize(card.type)} Card`;
         };
-        const formatCardName = (card) => {
-          const baseName = getCardBaseName(card);
+        const formatCardName = (card, lang = 'en') => {
+          const baseName = getCardBaseName(card, lang);
           if (card.state !== CardState.NONE) {
-            return `${formatStateName(card.state)} ${baseName}`;
+            const stateName = lang === 'zh' ? 
+              (card.state === CardState.EPIPHANY ? '顿悟' : '神圣顿悟') :
+              formatStateName(card.state);
+            return lang === 'zh' ? `${stateName}${baseName}` : `${stateName} ${baseName}`;
           }
           return baseName;
         };
@@ -397,14 +405,16 @@
             const newCard = { id: current.nextId, type: type, originalType: type, state: CardState.NONE, name: `${capitalize(type)} Card` };
             return { cards: [...current.cards, newCard], nextId: current.nextId + 1 };
           };
-          updateGameStateAndLog(updater, `add ${capitalize(type)} Card`);
+          const desc = language === 'zh' ? `添加${type === 'neutral' ? '中立' : type === 'monster' ? '怪物' : type === 'forbidden' ? '禁忌' : capitalize(type)}卡` : `add ${capitalize(type)} Card`;
+          updateGameStateAndLog(updater, desc);
         };
         const handleAddMonsterCard = (monsterCard) => {
           const updater = (current) => {
             const newCard = { ...monsterCard, id: current.nextId };
             return { cards: [...current.cards, newCard], nextId: current.nextId + 1 };
           };
-          updateGameStateAndLog(updater, `add ${language === 'zh' ? monsterCard.nameZh : monsterCard.name}`);
+          const desc = language === 'zh' ? `添加${monsterCard.nameZh || monsterCard.name}` : `add ${monsterCard.name}`;
+          updateGameStateAndLog(updater, desc);
           setIsMonsterSelectorOpen(false);
         };
         const handleAddNeutralCard = (neutralCard) => {
@@ -412,22 +422,23 @@
             const newCard = { ...neutralCard, id: current.nextId };
             return { cards: [...current.cards, newCard], nextId: current.nextId + 1 };
           };
-          updateGameStateAndLog(updater, `add ${language === 'zh' ? neutralCard.nameZh : neutralCard.name}`);
+          const desc = language === 'zh' ? `添加${neutralCard.nameZh || neutralCard.name}` : `add ${neutralCard.name}`;
+          updateGameStateAndLog(updater, desc);
           setIsNeutralSelectorOpen(false);
         };
         const handleUpdateCard = (updatedCard) => {
           const oldCard = currentGameState.cards.find(c => c.id === updatedCard.id);
           if (!oldCard) return;
           const updater = (current) => ({ cards: current.cards.map(card => (card.id === updatedCard.id ? updatedCard : card)) });
-          let description = `update ${formatCardName(oldCard)}`;
+          let description = language === 'zh' ? `更新${formatCardName(oldCard, 'zh')}` : `update ${formatCardName(oldCard)}`;
           if (oldCard.state !== updatedCard.state) {
-            const cardBaseName = getCardBaseName(oldCard);
+            const cardBaseName = getCardBaseName(oldCard, language);
             if (updatedCard.state === CardState.NONE) {
-              description = `remove ${formatStateName(oldCard.state)} from ${cardBaseName}`;
+              description = language === 'zh' ? `移除${oldCard.state === CardState.EPIPHANY ? '顿悟' : '神圣顿悟'}从${cardBaseName}` : `remove ${formatStateName(oldCard.state)} from ${cardBaseName}`;
             } else if (oldCard.state === CardState.NONE) {
-              description = `${formatStateName(updatedCard.state)} to ${cardBaseName}`;
+              description = language === 'zh' ? `${updatedCard.state === CardState.EPIPHANY ? '顿悟' : '神圣顿悟'}到${cardBaseName}` : `${formatStateName(updatedCard.state)} to ${cardBaseName}`;
             } else {
-              description = `convert ${cardBaseName} to ${formatStateName(updatedCard.state)}`;
+              description = language === 'zh' ? `转换${cardBaseName}到${updatedCard.state === CardState.EPIPHANY ? '顿悟' : '神圣顿悟'}` : `convert ${cardBaseName} to ${formatStateName(updatedCard.state)}`;
             }
           }
           updateGameStateAndLog(updater, description);
@@ -439,7 +450,8 @@
             cards: current.cards.map(card => card.id === cardId ? { ...card, type: CardType.NEUTRAL, state: CardState.NONE, name: 'Neutral Card' } : card),
             conversionCount: current.conversionCount + 1,
           });
-          updateGameStateAndLog(updater, `convert ${formatCardName(cardToConvert)} to Neutral`);
+          const desc = language === 'zh' ? `转换${formatCardName(cardToConvert, 'zh')}到中立` : `convert ${formatCardName(cardToConvert)} to Neutral`;
+          updateGameStateAndLog(updater, desc);
         };
         const handleRemoveCard = (cardId) => {
           const cardToRemove = currentGameState.cards.find(card => card.id === cardId);
@@ -448,20 +460,23 @@
             cards: current.cards.filter(card => card.id !== cardId),
             removedCards: [...current.removedCards, cardToRemove],
           });
-          updateGameStateAndLog(updater, `remove ${formatCardName(cardToRemove)}`);
+          const desc = language === 'zh' ? `移除${formatCardName(cardToRemove, 'zh')}` : `remove ${formatCardName(cardToRemove)}`;
+          updateGameStateAndLog(updater, desc);
         };
         const handleDiscardCard = (cardId) => {
           const cardToDiscard = currentGameState.cards.find(c => c.id === cardId);
           if (!cardToDiscard || cardToDiscard.type !== CardType.NEUTRAL) return;
           const updater = (current) => ({ cards: current.cards.filter(card => card.id !== cardId) });
-          updateGameStateAndLog(updater, 'remove Neutral Card by [Remove] effect', 0);
+          const desc = language === 'zh' ? `移除${formatCardName(cardToDiscard, 'zh')}通过[移除]效果` : `remove ${formatCardName(cardToDiscard)} by [Remove] effect`;
+          updateGameStateAndLog(updater, desc, 0);
         };
         const handleDuplicateCard = (cardToDuplicate) => {
           const updater = (current) => {
             const newCard = { ...cardToDuplicate, id: current.nextId, state: cardToDuplicate.state, isUltimate: false, isDuplicate: true };
             return { cards: [...current.cards, newCard], duplicationCount: current.duplicationCount + 1, nextId: current.nextId + 1 };
           };
-          updateGameStateAndLog(updater, `duplicate ${formatCardName(cardToDuplicate)}`);
+          const desc = language === 'zh' ? `复制${formatCardName(cardToDuplicate, 'zh')}` : `duplicate ${formatCardName(cardToDuplicate)}`;
+          updateGameStateAndLog(updater, desc);
         };
         const totalScore = React.useMemo(() => calculateTotalScore(currentGameState, initialCardIds), [currentGameState, initialCardIds]);
         const pointPreviews = React.useMemo(() => {
@@ -493,40 +508,6 @@
         const combatantGridClasses = { 1: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6', 2: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5', 3: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' }[totalCombatants] || 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6';
         
         const selectedCombatant = combatants.find(c => c.id === selectedCombatantId);
-        
-        const translateLogDescription = (desc) => {
-          if (!desc) return desc;
-          const translations = {
-            'add': '添加',
-            'remove': '移除',
-            'update': '更新',
-            'duplicate': '复制',
-            'convert': '转换',
-            'Epiphany to': '顿悟到',
-            'Divine Epiphany to': '神圣顿悟到',
-            'remove Epiphany from': '移除顿悟从',
-            'remove Divine Epiphany from': '移除神圣顿悟从',
-            'convert': '转换',
-            ' to Neutral': '到中立',
-            ' Card': '卡',
-            'Neutral Card': '中立卡',
-            'Monster Card': '怪物卡',
-            'Forbidden Card': '禁忌卡',
-            'Unique Card': '独特卡',
-            'Ultimate Card': '终极卡',
-            'by \\[Remove\\] effect': '通过[移除]效果'
-          };
-          
-          let translated = desc;
-          // 先处理长短语，避免部分匹配
-          const sortedEntries = Object.entries(translations).sort((a, b) => b[0].length - a[0].length);
-          sortedEntries.forEach(([en, zh]) => {
-            // 使用单词边界匹配，但允许空格和标点
-            const regex = new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
-            translated = translated.replace(regex, zh);
-          });
-          return translated;
-        };
         
         return (
           <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 bg-gray-100 dark:bg-gray-900/50 p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700">
@@ -689,7 +670,7 @@
                         <ul className="space-y-1">
                           {actionLog.slice().reverse().map(log => (
                             <li key={log.id} className="flex justify-between items-center text-sm py-1 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-                              <span>{t === undefined ? log.description.charAt(0).toUpperCase() + log.description.slice(1) : (language === 'zh' ? translateLogDescription(log.description) : log.description.charAt(0).toUpperCase() + log.description.slice(1))}</span>
+                              <span>{log.description.charAt(0).toUpperCase() + log.description.slice(1)}</span>
                               <span className={`font-bold font-mono ${log.points > 0 ? 'text-green-500' : log.points < 0 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>{log.points > 0 ? `+${log.points}` : log.points}</span>
                             </li>
                           ))}
@@ -701,7 +682,7 @@
                     <div className={`p-2 sm:p-3 ${actionLog.length > 0 ? 'border-t border-gray-200 dark:border-gray-700' : ''}`}>
                       {lastLog ? (
                         <div className="flex justify-between items-center text-xs sm:text-sm">
-                          <span>{t === undefined ? lastLog.description.charAt(0).toUpperCase() + lastLog.description.slice(1) : (language === 'zh' ? translateLogDescription(lastLog.description) : lastLog.description.charAt(0).toUpperCase() + lastLog.description.slice(1))}</span>
+                          <span>{lastLog.description.charAt(0).toUpperCase() + lastLog.description.slice(1)}</span>
                           <span className={`font-bold font-mono ${lastLog.points > 0 ? 'text-green-500' : lastLog.points < 0 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>{lastLog.points > 0 ? `+${lastLog.points}` : lastLog.points}</span>
                         </div>
                       ) : <p className="text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm">{t.noActions}</p>}

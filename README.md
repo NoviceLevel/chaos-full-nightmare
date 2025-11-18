@@ -30,8 +30,3 @@ A web-based save data calculator and deck builder for Chaos Zero Night game.
 - 100% Scale down and fix layout size. Make 3 layout viewable in 1280x720p
 - 100% Mobile friendly/super condense layout
 - 100% Card-based hover selection for all selectors (Tier, Combatants, Character, Preset)
-
-**Expansion**
-- Div screen into half, so you can view possible acquireable item/card, and event choice in the current chaos world.
-- At items target and how to get them
-- Deck builder: update database including epiphany variation and divine epiphany, add target card at the same line with target item
