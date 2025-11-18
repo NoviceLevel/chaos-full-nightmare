@@ -723,6 +723,7 @@
         const [isPresetSelectorOpen, setIsPresetSelectorOpen] = React.useState(false);
         const [isSavePresetDialogOpen, setIsSavePresetDialogOpen] = React.useState(false);
         const [presetNameInput, setPresetNameInput] = React.useState('');
+        const [isDeletePresetDialogOpen, setIsDeletePresetDialogOpen] = React.useState(false);
         const [buttonTextSize, setButtonTextSize] = React.useState(12);
         const [theme, setTheme] = React.useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         const [language, setLanguage] = React.useState(() => localStorage.getItem('language') || 'en');
@@ -1087,57 +1088,6 @@
                         <XIcon className="h-5 w-5" />
                       </button>
                     </div>
-                    {isSavePresetDialogOpen && (
-                      <>
-                        <div 
-                          className="fixed inset-0 z-[100] bg-black/50" 
-                          onClick={() => setIsSavePresetDialogOpen(false)}
-                        />
-                        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-cyan-500 dark:border-cyan-400 p-6 w-[90vw] sm:w-[400px]">
-                          <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">{t.savePresetTitle}</h3>
-                          <div className="mb-4">
-                            <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">{t.presetNameLabel}</label>
-                            <input
-                              type="text"
-                              value={presetNameInput}
-                              onChange={(e) => setPresetNameInput(e.target.value)}
-                              onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                  handleConfirmSavePreset();
-                                }
-                              }}
-                              placeholder={t.presetNamePlaceholder}
-                              className="w-full px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-cyan-500 focus:outline-none"
-                              autoFocus
-                            />
-                            {presetNameInput.trim() === '' && presetNameInput !== '' && (
-                              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t.presetNameEmpty}</p>
-                            )}
-                            {presetNameInput.trim() !== '' && presets.some(p => p.name === presetNameInput.trim()) && (
-                              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t.presetNameExists}</p>
-                            )}
-                          </div>
-                          <div className="flex justify-end gap-3">
-                            <button
-                              onClick={() => {
-                                setIsSavePresetDialogOpen(false);
-                                setPresetNameInput('');
-                              }}
-                              className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-200"
-                            >
-                              {t.cancel}
-                            </button>
-                            <button
-                              onClick={handleConfirmSavePreset}
-                              disabled={!presetNameInput.trim() || presets.some(p => p.name === presetNameInput.trim())}
-                              className="px-4 py-2 bg-cyan-500 text-white font-semibold rounded-md hover:enabled:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                            >
-                              {t.save}
-                            </button>
-                          </div>
-                        </div>
-                      </>
-                    )}
                     <div className="hidden lg:flex items-center gap-2">
                       <label htmlFor="text-size-slider" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">{t.buttonText}</label>
                       <input id="text-size-slider" type="range" min="10" max="16" step="0.5" value={buttonTextSize} onChange={(e) => setButtonTextSize(parseFloat(e.target.value))} className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
@@ -1154,6 +1104,57 @@
             <main className={`w-full mx-auto px-2 sm:px-4 lg:px-6 pb-4 sm:pb-8 grid ${combatantGridClasses[combatantCount]} gap-3 sm:gap-4 lg:gap-6`}>
               {combatantsHistories.map((historyState, index) => <CombatantLayout key={index} combatantIndex={index} historyState={historyState} onHistoryChange={(newHistory) => handleHistoryChange(index, newHistory)} scoreLimit={scoreLimit} buttonTextSize={buttonTextSize} combatants={COMBATANTS} selectedCombatantId={selectedCombatants[index]} onCharacterChange={handleCharacterChange} totalCombatants={combatantCount} t={t} language={language} />)}
             </main>
+            {isSavePresetDialogOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[100] bg-black/50" 
+                  onClick={() => setIsSavePresetDialogOpen(false)}
+                />
+                <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-cyan-500 dark:border-cyan-400 p-6 w-[90vw] sm:w-[400px]">
+                  <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">{t.savePresetTitle}</h3>
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">{t.presetNameLabel}</label>
+                    <input
+                      type="text"
+                      value={presetNameInput}
+                      onChange={(e) => setPresetNameInput(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          handleConfirmSavePreset();
+                        }
+                      }}
+                      placeholder={t.presetNamePlaceholder}
+                      className="w-full px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-cyan-500 focus:outline-none"
+                      autoFocus
+                    />
+                    {presetNameInput.trim() === '' && presetNameInput !== '' && (
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t.presetNameEmpty}</p>
+                    )}
+                    {presetNameInput.trim() !== '' && presets.some(p => p.name === presetNameInput.trim()) && (
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">{t.presetNameExists}</p>
+                    )}
+                  </div>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => {
+                        setIsSavePresetDialogOpen(false);
+                        setPresetNameInput('');
+                      }}
+                      className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-200"
+                    >
+                      {t.cancel}
+                    </button>
+                    <button
+                      onClick={handleConfirmSavePreset}
+                      disabled={!presetNameInput.trim() || presets.some(p => p.name === presetNameInput.trim())}
+                      className="px-4 py-2 bg-cyan-500 text-white font-semibold rounded-md hover:enabled:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    >
+                      {t.save}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         );
       };
