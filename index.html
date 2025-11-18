@@ -472,16 +472,16 @@
           return previews;
         }, [currentGameState, totalScore, initialCardIds]);
         
-        const combatantGridClasses = { 1: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6', 2: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4', 3: 'grid-cols-4' }[totalCombatants] || 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6';
+        const combatantGridClasses = { 1: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6', 2: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5', 3: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' }[totalCombatants] || 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6';
         
         const selectedCombatant = combatants.find(c => c.id === selectedCombatantId);
         
         return (
-          <div className="flex flex-col gap-4 bg-gray-100 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 bg-gray-100 dark:bg-gray-900/50 p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-center gap-2 relative">
               <button 
                 onClick={() => setIsCharacterSelectorOpen(!isCharacterSelectorOpen)}
-                className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-lg font-bold rounded-lg px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm sm:text-base lg:text-lg font-bold rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
               >
                 {selectedCombatant?.name || 'Select Character'}
               </button>
@@ -536,8 +536,8 @@
               )}
             </div>
             <ScoreDisplay score={totalScore} scoreLimit={scoreLimit} onReset={handleReset} onUndo={handleUndo} onRedo={handleRedo} isUndoDisabled={currentIndex === 0} isRedoDisabled={currentIndex >= history.length - 1} isResetDisabled={history.length === 1 && currentIndex === 0} removalCount={removedCards.length} duplicationCount={duplicationCount} />
-            <div className={totalCombatants === 1 ? "lg:grid lg:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] gap-4" : "contents"}>
-              <div className={`grid ${combatantGridClasses} gap-4`}>
+            <div className={totalCombatants === 1 ? "lg:grid lg:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] gap-2 sm:gap-3 lg:gap-4" : "contents"}>
+              <div className={`grid ${combatantGridClasses} gap-2 sm:gap-3 lg:gap-4`}>
                 {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} />)}
                 <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
                   <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label="Add new neutral card">Add Neutral</button>
@@ -547,8 +547,8 @@
               </div>
               <div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                  <button onClick={() => setIsLogExpanded(!isLogExpanded)} className="w-full flex justify-between items-center p-3 text-left disabled:cursor-not-allowed" disabled={actionLog.length === 0} aria-expanded={isLogExpanded} aria-controls={`action-log-content-${combatantIndex}`}>
-                    <h3 className="text-md font-bold">{isLogExpanded ? 'Action Log' : (lastLog ? 'Last Action' : 'Action Log')}</h3>
+                  <button onClick={() => setIsLogExpanded(!isLogExpanded)} className="w-full flex justify-between items-center p-2 sm:p-3 text-left disabled:cursor-not-allowed" disabled={actionLog.length === 0} aria-expanded={isLogExpanded} aria-controls={`action-log-content-${combatantIndex}`}>
+                    <h3 className="text-sm sm:text-md font-bold">{isLogExpanded ? 'Action Log' : (lastLog ? 'Last Action' : 'Action Log')}</h3>
                     {actionLog.length > 0 && (isLogExpanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />)}
                   </button>
                   <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isLogExpanded ? 'max-h-[calc(100vh-280px)]' : 'max-h-0'}`} id={`action-log-content-${combatantIndex}`}>
@@ -566,13 +566,13 @@
                     </div>
                   </div>
                   {!isLogExpanded && (
-                    <div className={`p-3 ${actionLog.length > 0 ? 'border-t border-gray-200 dark:border-gray-700' : ''}`}>
+                    <div className={`p-2 sm:p-3 ${actionLog.length > 0 ? 'border-t border-gray-200 dark:border-gray-700' : ''}`}>
                       {lastLog ? (
-                        <div className="flex justify-between items-center text-sm">
+                        <div className="flex justify-between items-center text-xs sm:text-sm">
                           <span>{lastLog.description.charAt(0).toUpperCase() + lastLog.description.slice(1)}</span>
                           <span className={`font-bold font-mono ${lastLog.points > 0 ? 'text-green-500' : lastLog.points < 0 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>{lastLog.points > 0 ? `+${lastLog.points}` : lastLog.points}</span>
                         </div>
-                      ) : <p className="text-center text-gray-500 dark:text-gray-400 text-sm">No actions yet.</p>}
+                      ) : <p className="text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No actions yet.</p>}
                     </div>
                   )}
                 </div>
@@ -692,17 +692,17 @@
           }
         };
 
-        const combatantGridClasses = { 1: 'grid-cols-1', 2: 'grid-cols-1 lg:grid-cols-2', 3: 'grid-cols-1 xl:grid-cols-3' };
+        const combatantGridClasses = { 1: 'grid-cols-1', 2: 'grid-cols-1 lg:grid-cols-2', 3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' };
 
         return (
           <div className="min-h-screen">
-            <div className="sticky top-0 z-10 bg-gray-100/80 dark:bg-gray-900/80 backdrop-blur-sm py-3 mb-4 border-b border-gray-200 dark:border-gray-700">
-              <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center gap-4">
-                  <div className="flex-1"><h1 className="text-xl font-bold whitespace-nowrap">Save Data Tracker</h1></div>
-                  <div className="flex-1 flex justify-center items-center flex-wrap gap-x-6 gap-y-2">
-                    <div className="flex items-center gap-2 relative">
-                      <label className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Tier</label>
+            <div className="sticky top-0 z-10 bg-gray-100/80 dark:bg-gray-900/80 backdrop-blur-sm py-2 sm:py-3 mb-2 sm:mb-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="w-full mx-auto px-2 sm:px-4 lg:px-6">
+                <div className="flex justify-between items-center gap-2 sm:gap-4">
+                  <div className="flex-1"><h1 className="text-base sm:text-lg lg:text-xl font-bold whitespace-nowrap">Save Data Tracker</h1></div>
+                  <div className="flex-1 flex justify-center items-center flex-wrap gap-x-2 sm:gap-x-4 lg:gap-x-6 gap-y-2">
+                    <div className="flex items-center gap-1 sm:gap-2 relative">
+                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">Tier</label>
                       <button
                         onClick={() => setIsTierSelectorOpen(!isTierSelectorOpen)}
                         className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-16 text-center"
@@ -757,8 +757,8 @@
                         </>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 relative">
-                      <label className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Combatants</label>
+                    <div className="flex items-center gap-1 sm:gap-2 relative">
+                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">Combatants</label>
                       <button
                         onClick={() => setIsCombatantSelectorOpen(!isCombatantSelectorOpen)}
                         className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-16 text-center"
@@ -863,7 +863,7 @@
                         <XIcon className="h-5 w-5" />
                       </button>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="hidden lg:flex items-center gap-2">
                       <label htmlFor="text-size-slider" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Button Text</label>
                       <input id="text-size-slider" type="range" min="10" max="16" step="0.5" value={buttonTextSize} onChange={(e) => setButtonTextSize(parseFloat(e.target.value))} className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
                     </div>
@@ -875,7 +875,7 @@
                 </div>
               </div>
             </div>
-            <main className={`w-full mx-auto px-4 sm:px-6 lg:px-8 pb-8 grid ${combatantGridClasses[combatantCount]} gap-8`}>
+            <main className={`w-full mx-auto px-2 sm:px-4 lg:px-6 pb-4 sm:pb-8 grid ${combatantGridClasses[combatantCount]} gap-3 sm:gap-4 lg:gap-6`}>
               {combatantsHistories.map((historyState, index) => <CombatantLayout key={index} combatantIndex={index} historyState={historyState} onHistoryChange={(newHistory) => handleHistoryChange(index, newHistory)} scoreLimit={scoreLimit} buttonTextSize={buttonTextSize} combatants={COMBATANTS} selectedCombatantId={selectedCombatants[index]} onCharacterChange={handleCharacterChange} totalCombatants={combatantCount} />)}
             </main>
           </div>
