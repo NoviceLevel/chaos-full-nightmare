@@ -161,7 +161,7 @@
           </div>
         );
       };
-      const ScoreDisplay = ({ score, scoreLimit, onReset, onUndo, onRedo, isUndoDisabled, isRedoDisabled, isResetDisabled, removalCount, duplicationCount }) => {
+      const ScoreDisplay = ({ score, scoreLimit, onReset, onUndo, onRedo, isUndoDisabled, isRedoDisabled, isResetDisabled, removalCount, duplicationCount, t }) => {
         const progressPercentage = Math.min((score / scoreLimit) * 100, 100);
         const isOverLimit = score > scoreLimit;
         return (
@@ -178,21 +178,21 @@
             </div>
             <div className="mt-4 flex justify-between items-center">
               <div className="flex items-center gap-3 flex-wrap">
-                <LadderIndicator label="Removals" ladder={REMOVAL_COST_LADDER} count={removalCount} />
-                <LadderIndicator label="Duplicates" ladder={DUPLICATION_COST_LADDER} count={duplicationCount} />
+                <LadderIndicator label={t.removals} ladder={REMOVAL_COST_LADDER} count={removalCount} />
+                <LadderIndicator label={t.duplicates} ladder={DUPLICATION_COST_LADDER} count={duplicationCount} />
               </div>
               <div className="flex items-center gap-1.5">
-                <button onClick={onUndo} disabled={isUndoDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label="Undo last action">
+                <button onClick={onUndo} disabled={isUndoDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label={t.undo}>
                   <UndoIcon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Undo</span>
+                  <span className="hidden sm:inline">{t.undo}</span>
                 </button>
-                <button onClick={onRedo} disabled={isRedoDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label="Redo last action">
+                <button onClick={onRedo} disabled={isRedoDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label={t.redo}>
                   <RedoIcon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Redo</span>
+                  <span className="hidden sm:inline">{t.redo}</span>
                 </button>
-                <button onClick={onReset} disabled={isResetDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label="Reset calculator">
+                <button onClick={onReset} disabled={isResetDisabled} className="px-2 py-1.5 bg-gray-300 dark:bg-gray-600 text-black dark:text-white font-semibold rounded-md flex items-center gap-1.5 transition-colors duration-200 disabled:opacity-50 hover:enabled:bg-gray-400 dark:hover:enabled:bg-gray-500" aria-label={t.reset}>
                   <ResetIcon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Reset</span>
+                  <span className="hidden sm:inline">{t.reset}</span>
                 </button>
               </div>
             </div>
@@ -201,7 +201,7 @@
       };
 
       // --- From components/CalculatorCard.tsx ---
-      const CalculatorCard = ({ card, score, pointPreviews, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize }) => {
+      const CalculatorCard = ({ card, score, pointPreviews, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize, t }) => {
         const cardRef = React.useRef(null);
         const [isNarrow, setIsNarrow] = React.useState(false);
         React.useEffect(() => {
@@ -314,7 +314,7 @@
                     <XIcon className="w-4 h-4" />
                   </button>
                   <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 w-max max-w-xs p-2 text-xs text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none">
-                    Only click this if Neutral card has [Remove] effect
+                    {t.removeEffectTip}
                   </div>
                 </div>
               )}
@@ -566,10 +566,10 @@
                 </>
               )}
             </div>
-            <ScoreDisplay score={totalScore} scoreLimit={scoreLimit} onReset={handleReset} onUndo={handleUndo} onRedo={handleRedo} isUndoDisabled={currentIndex === 0} isRedoDisabled={currentIndex >= history.length - 1} isResetDisabled={history.length === 1 && currentIndex === 0} removalCount={removedCards.length} duplicationCount={duplicationCount} />
+            <ScoreDisplay score={totalScore} scoreLimit={scoreLimit} onReset={handleReset} onUndo={handleUndo} onRedo={handleRedo} isUndoDisabled={currentIndex === 0} isRedoDisabled={currentIndex >= history.length - 1} isResetDisabled={history.length === 1 && currentIndex === 0} removalCount={removedCards.length} duplicationCount={duplicationCount} t={t} />
             <div className={totalCombatants === 1 ? "lg:grid lg:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] gap-2 sm:gap-3 lg:gap-4" : "contents"}>
               <div className={`grid ${combatantGridClasses} gap-2 sm:gap-3 lg:gap-4`}>
-                {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} />)}
+                {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} t={t} />)}
                 <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
                   <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label={t.addNeutral}>{t.addNeutral}</button>
                   <button onClick={() => handleAddCard(CardType.MONSTER)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-purple-600 text-white hover:bg-purple-700" aria-label={t.addMonster}>{t.addMonster}</button>
@@ -694,7 +694,13 @@
             addNeutral: 'Add Neutral',
             addMonster: 'Add Monster',
             addForbidden: 'Add Forbidden',
-            cards: 'cards'
+            cards: 'cards',
+            undo: 'Undo',
+            redo: 'Redo',
+            reset: 'Reset',
+            removals: 'Removals',
+            duplicates: 'Duplicates',
+            removeEffectTip: 'Only click this if Neutral card has [Remove] effect'
           },
           zh: {
             title: '存档数据追踪器',
@@ -713,7 +719,13 @@
             addNeutral: '添加中立',
             addMonster: '添加怪物',
             addForbidden: '添加禁忌',
-            cards: '张卡'
+            cards: '张卡',
+            undo: '撤销',
+            redo: '重做',
+            reset: '重置',
+            removals: '移除次数',
+            duplicates: '复制次数',
+            removeEffectTip: '仅当中立卡有[移除]效果时点击'
           }
         }[language];
         const handleHistoryChange = (index, newHistoryState) => {
