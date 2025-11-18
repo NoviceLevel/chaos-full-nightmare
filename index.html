@@ -586,6 +586,7 @@
       const App = () => {
         const [combatantCount, setCombatantCount] = React.useState(1);
         const [tier, setTier] = React.useState(1);
+        const [isTierSelectorOpen, setIsTierSelectorOpen] = React.useState(false);
         const [buttonTextSize, setButtonTextSize] = React.useState(12);
         const [theme, setTheme] = React.useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         const [combatantsHistories, setCombatantsHistories] = React.useState([{ history: [getInitialGameState()], currentIndex: 0 }]);
@@ -698,11 +699,61 @@
                 <div className="flex justify-between items-center gap-4">
                   <div className="flex-1"><h1 className="text-xl font-bold whitespace-nowrap">Save Data Tracker</h1></div>
                   <div className="flex-1 flex justify-center items-center flex-wrap gap-x-6 gap-y-2">
-                    <div className="flex items-center gap-2">
-                      <label htmlFor="tier-select" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Tier</label>
-                      <select id="tier-select" value={tier} onChange={(e) => setTier(parseInt(e.target.value, 10))} className="bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-16 p-1.5 text-center">
-                        {[...Array(20)].map((_, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
-                      </select>
+                    <div className="flex items-center gap-2 relative">
+                      <label className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Tier</label>
+                      <button
+                        onClick={() => setIsTierSelectorOpen(!isTierSelectorOpen)}
+                        className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-16 text-center"
+                      >
+                        {tier}
+                      </button>
+                      
+                      {isTierSelectorOpen && (
+                        <>
+                          <div 
+                            className="fixed inset-0 z-40" 
+                            onClick={() => setIsTierSelectorOpen(false)}
+                          />
+                          <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-2 sm:p-3 max-h-[70vh] overflow-y-auto w-[280px] sm:w-[320px]">
+                            <div className="grid grid-cols-5 gap-2">
+                              {[...Array(20)].map((_, i) => {
+                                const tierValue = i + 1;
+                                return (
+                                  <button
+                                    key={tierValue}
+                                    onClick={() => {
+                                      setTier(tierValue);
+                                      setIsTierSelectorOpen(false);
+                                    }}
+                                    className={`group relative aspect-square rounded-lg border-2 transition-all duration-200 ${
+                                      tierValue === tier
+                                        ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/30 shadow-lg scale-105' 
+                                        : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:border-cyan-400 hover:shadow-xl hover:scale-110'
+                                    }`}
+                                  >
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <div className={`text-base sm:text-lg font-bold ${
+                                        tierValue === tier
+                                          ? 'text-cyan-700 dark:text-cyan-300' 
+                                          : 'text-gray-700 dark:text-gray-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400'
+                                      }`}>
+                                        {tierValue}
+                                      </div>
+                                    </div>
+                                    {tierValue === tier && (
+                                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-cyan-500 rounded-full flex items-center justify-center">
+                                        <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                      </div>
+                                    )}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <label htmlFor="combatant-select" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Combatants</label>
