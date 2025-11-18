@@ -351,6 +351,7 @@
         const [isLogExpanded, setIsLogExpanded] = React.useState(false);
         const [isCharacterSelectorOpen, setIsCharacterSelectorOpen] = React.useState(false);
         const [isMonsterSelectorOpen, setIsMonsterSelectorOpen] = React.useState(false);
+        const [isNeutralSelectorOpen, setIsNeutralSelectorOpen] = React.useState(false);
         const lastLog = actionLog.length > 0 ? actionLog[actionLog.length - 1] : null;
 
         const initialCardIds = React.useMemo(() => new Set(history[0].cards.map(c => c.id)), [history[0]]);
@@ -405,6 +406,14 @@
           };
           updateGameStateAndLog(updater, `add ${language === 'zh' ? monsterCard.nameZh : monsterCard.name}`);
           setIsMonsterSelectorOpen(false);
+        };
+        const handleAddNeutralCard = (neutralCard) => {
+          const updater = (current) => {
+            const newCard = { ...neutralCard, id: current.nextId };
+            return { cards: [...current.cards, newCard], nextId: current.nextId + 1 };
+          };
+          updateGameStateAndLog(updater, `add ${language === 'zh' ? neutralCard.nameZh : neutralCard.name}`);
+          setIsNeutralSelectorOpen(false);
         };
         const handleUpdateCard = (updatedCard) => {
           const oldCard = currentGameState.cards.find(c => c.id === updatedCard.id);
@@ -583,7 +592,7 @@
               <div className={`grid ${combatantGridClasses} gap-2 sm:gap-3 lg:gap-4`}>
                 {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} t={t} language={language} />)}
                 <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
-                  <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label={t.addNeutral}>{t.addNeutral}</button>
+                  <button onClick={() => setIsNeutralSelectorOpen(true)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label={t.addNeutral}>{t.addNeutral}</button>
                   <button onClick={() => setIsMonsterSelectorOpen(true)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-purple-600 text-white hover:bg-purple-700" aria-label={t.addMonster}>{t.addMonster}</button>
                   <button onClick={() => handleAddCard(CardType.FORBIDDEN)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-red-600 text-white hover:bg-red-700" aria-label={t.addForbidden}>{t.addForbidden}</button>
                 </div>
@@ -620,6 +629,46 @@
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-1">
                             <div className="text-[8px] sm:text-[10px] font-bold text-white text-center">
                               {language === 'zh' ? monster.nameZh : monster.name}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              {isNeutralSelectorOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40 bg-black/50" 
+                    onClick={() => setIsNeutralSelectorOpen(false)}
+                  />
+                  <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-stone-500 dark:border-stone-400 p-4 max-h-[80vh] overflow-y-auto w-[95vw] sm:w-auto sm:min-w-[700px] sm:max-w-[90vw]">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-bold text-stone-600 dark:text-stone-400">{t.selectNeutral || (language === 'zh' ? '选择中立卡' : 'Select Neutral Card')}</h3>
+                      <button onClick={() => setIsNeutralSelectorOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2 sm:gap-3">
+                      {NEUTRAL_DECK.map(neutral => (
+                        <button
+                          key={neutral.id}
+                          onClick={() => handleAddNeutralCard(neutral)}
+                          className="group relative aspect-[2/3] rounded-lg border-2 border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-900/30 hover:border-stone-500 hover:shadow-xl hover:scale-110 transition-all duration-200 overflow-hidden"
+                        >
+                          {neutral.imageUrl && (
+                            <img 
+                              src={neutral.imageUrl} 
+                              alt={language === 'zh' ? neutral.nameZh : neutral.name}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                          )}
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-1">
+                            <div className="text-[8px] sm:text-[10px] font-bold text-white text-center">
+                              {language === 'zh' ? neutral.nameZh : neutral.name}
                             </div>
                           </div>
                         </button>
