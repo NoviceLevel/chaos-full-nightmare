@@ -344,7 +344,7 @@
       };
 
       // --- From components/CombatantLayout.tsx ---
-      const CombatantLayout = ({ combatantIndex, historyState, onHistoryChange, scoreLimit, buttonTextSize, combatants, selectedCombatantId, onCharacterChange, totalCombatants }) => {
+      const CombatantLayout = ({ combatantIndex, historyState, onHistoryChange, scoreLimit, buttonTextSize, combatants, selectedCombatantId, onCharacterChange, totalCombatants, t }) => {
         const { history, currentIndex } = historyState;
         const currentGameState = history[currentIndex];
         const { cards, removedCards, duplicationCount, actionLog } = currentGameState;
@@ -483,7 +483,7 @@
                 onClick={() => setIsCharacterSelectorOpen(!isCharacterSelectorOpen)}
                 className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm sm:text-base lg:text-lg font-bold rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
               >
-                {selectedCombatant?.name || 'Select Character'}
+                {selectedCombatant?.name || t.selectCharacter}
               </button>
               
               {isCharacterSelectorOpen && (
@@ -517,7 +517,7 @@
                                 {combatant.name}
                               </div>
                               <div className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 dark:text-gray-400">
-                                {combatant.deck.length} cards
+                                {combatant.deck.length} {t.cards}
                               </div>
                             </div>
                           </div>
@@ -540,15 +540,15 @@
               <div className={`grid ${combatantGridClasses} gap-2 sm:gap-3 lg:gap-4`}>
                 {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} />)}
                 <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
-                  <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label="Add new neutral card">Add Neutral</button>
-                  <button onClick={() => handleAddCard(CardType.MONSTER)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-purple-600 text-white hover:bg-purple-700" aria-label="Add new monster card">Add Monster</button>
-                  <button onClick={() => handleAddCard(CardType.FORBIDDEN)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-red-600 text-white hover:bg-red-700" aria-label="Add new forbidden card">Add Forbidden</button>
+                  <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label={t.addNeutral}>{t.addNeutral}</button>
+                  <button onClick={() => handleAddCard(CardType.MONSTER)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-purple-600 text-white hover:bg-purple-700" aria-label={t.addMonster}>{t.addMonster}</button>
+                  <button onClick={() => handleAddCard(CardType.FORBIDDEN)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-red-600 text-white hover:bg-red-700" aria-label={t.addForbidden}>{t.addForbidden}</button>
                 </div>
               </div>
               <div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                   <button onClick={() => setIsLogExpanded(!isLogExpanded)} className="w-full flex justify-between items-center p-2 sm:p-3 text-left disabled:cursor-not-allowed" disabled={actionLog.length === 0} aria-expanded={isLogExpanded} aria-controls={`action-log-content-${combatantIndex}`}>
-                    <h3 className="text-sm sm:text-md font-bold">{isLogExpanded ? 'Action Log' : (lastLog ? 'Last Action' : 'Action Log')}</h3>
+                    <h3 className="text-sm sm:text-md font-bold">{isLogExpanded ? t.actionLog : (lastLog ? t.lastAction : t.actionLog)}</h3>
                     {actionLog.length > 0 && (isLogExpanded ? <ChevronUpIcon className="w-5 h-5" /> : <ChevronDownIcon className="w-5 h-5" />)}
                   </button>
                   <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isLogExpanded ? 'max-h-[calc(100vh-280px)]' : 'max-h-0'}`} id={`action-log-content-${combatantIndex}`}>
@@ -572,7 +572,7 @@
                           <span>{lastLog.description.charAt(0).toUpperCase() + lastLog.description.slice(1)}</span>
                           <span className={`font-bold font-mono ${lastLog.points > 0 ? 'text-green-500' : lastLog.points < 0 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>{lastLog.points > 0 ? `+${lastLog.points}` : lastLog.points}</span>
                         </div>
-                      ) : <p className="text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No actions yet.</p>}
+                      ) : <p className="text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm">{t.noActions}</p>}
                     </div>
                   )}
                 </div>
@@ -591,6 +591,7 @@
         const [isPresetSelectorOpen, setIsPresetSelectorOpen] = React.useState(false);
         const [buttonTextSize, setButtonTextSize] = React.useState(12);
         const [theme, setTheme] = React.useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const [language, setLanguage] = React.useState(() => localStorage.getItem('language') || 'en');
         const [combatantsHistories, setCombatantsHistories] = React.useState([{ history: [getInitialGameState()], currentIndex: 0 }]);
         const [selectedCombatants, setSelectedCombatants] = React.useState(['default']);
         const [presets, setPresets] = React.useState([]);
@@ -636,6 +637,54 @@
         
         const scoreLimit = React.useMemo(() => 30 + (tier - 1) * 10, [tier]);
         const handleThemeToggle = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+        const handleLanguageToggle = () => {
+          setLanguage(prev => {
+            const newLang = prev === 'en' ? 'zh' : 'en';
+            localStorage.setItem('language', newLang);
+            return newLang;
+          });
+        };
+        
+        const t = {
+          en: {
+            title: 'Save Data Tracker',
+            tier: 'Tier',
+            combatants: 'Combatants',
+            loadTeam: 'Load Team',
+            noPresets: 'No presets saved',
+            saveTeam: 'Save current team',
+            deletePreset: 'Delete a team preset',
+            canOnlySave3: 'Can only save teams of 3 combatants.',
+            buttonText: 'Button Text',
+            selectCharacter: 'Select Character',
+            actionLog: 'Action Log',
+            lastAction: 'Last Action',
+            noActions: 'No actions yet.',
+            addNeutral: 'Add Neutral',
+            addMonster: 'Add Monster',
+            addForbidden: 'Add Forbidden',
+            cards: 'cards'
+          },
+          zh: {
+            title: '存档数据追踪器',
+            tier: '层级',
+            combatants: '战斗员',
+            loadTeam: '加载队伍',
+            noPresets: '暂无保存的预设',
+            saveTeam: '保存当前队伍',
+            deletePreset: '删除队伍预设',
+            canOnlySave3: '只能保存3人队伍。',
+            buttonText: '按钮文字',
+            selectCharacter: '选择角色',
+            actionLog: '操作日志',
+            lastAction: '最后操作',
+            noActions: '暂无操作。',
+            addNeutral: '添加中立',
+            addMonster: '添加怪物',
+            addForbidden: '添加禁忌',
+            cards: '张卡'
+          }
+        }[language];
         const handleHistoryChange = (index, newHistoryState) => {
           setCombatantsHistories(current => {
             const newHistories = [...current];
@@ -700,15 +749,16 @@
               <div className="w-full mx-auto px-2 sm:px-4 lg:px-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
                   <div className="w-full sm:flex-1 flex justify-between sm:justify-start items-center">
-                    <h1 className="text-base sm:text-lg lg:text-xl font-bold whitespace-nowrap">Save Data Tracker</h1>
+                    <h1 className="text-base sm:text-lg lg:text-xl font-bold whitespace-nowrap">{t.title}</h1>
                     <div className="flex sm:hidden items-center gap-2">
+                      <button onClick={handleLanguageToggle} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600 text-xs font-bold" aria-label="Toggle language">{language === 'en' ? '中' : 'EN'}</button>
                       <a href="https://github.com/asterah/chaos-full-nightmare" target="_blank" rel="noopener noreferrer" className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600" aria-label="View source on GitHub"><GitHubIcon className="h-5 w-5" /></a>
                       <button onClick={handleThemeToggle} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600" aria-label="Toggle theme"><ThemeIcon theme={theme} className="h-5 w-5" /></button>
                     </div>
                   </div>
                   <div className="w-full sm:flex-1 flex justify-center items-center flex-wrap gap-x-2 sm:gap-x-4 lg:gap-x-6 gap-y-2">
                     <div className="flex items-center gap-1 sm:gap-2 relative">
-                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">Tier</label>
+                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">{t.tier}</label>
                       <button
                         onClick={() => setIsTierSelectorOpen(!isTierSelectorOpen)}
                         className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-16 text-center"
@@ -764,7 +814,7 @@
                       )}
                     </div>
                     <div className="flex items-center gap-1 sm:gap-2 relative">
-                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">Combatants</label>
+                      <label className="hidden sm:inline font-bold text-sm text-black dark:text-white whitespace-nowrap">{t.combatants}</label>
                       <button
                         onClick={() => setIsCombatantSelectorOpen(!isCombatantSelectorOpen)}
                         className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-16 text-center"
@@ -821,7 +871,7 @@
                         onClick={() => setIsPresetSelectorOpen(!isPresetSelectorOpen)}
                         className="bg-gray-200 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg px-3 py-1.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                       >
-                        Load Team
+                        {t.loadTeam}
                       </button>
                       
                       {isPresetSelectorOpen && (
@@ -833,7 +883,7 @@
                           <div className="absolute top-full mt-2 left-0 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-2 sm:p-3 max-h-[70vh] overflow-y-auto min-w-[200px] max-w-[300px]">
                             {presets.length === 0 ? (
                               <div className="text-center text-gray-500 dark:text-gray-400 text-sm py-4 px-2">
-                                No presets saved
+                                {t.noPresets}
                               </div>
                             ) : (
                               <div className="flex flex-col gap-2">
@@ -850,7 +900,7 @@
                                       {preset.name}
                                     </div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                      {preset.combatantIds.map(id => COMBATANTS.find(c => c.id === id)?.name || id).join(', ')}
+                                      {preset.combatantIds.map(id => COMBATANTS.find(c => c.id === id)?.name || id).join(language === 'zh' ? '、' : ', ')}
                                     </div>
                                   </button>
                                 ))}
@@ -860,21 +910,22 @@
                         </>
                       )}
                       <div className="relative group">
-                        <button onClick={handleSavePreset} disabled={combatantCount !== 3} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:enabled:bg-gray-300 dark:hover:enabled:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Save current team">
+                        <button onClick={handleSavePreset} disabled={combatantCount !== 3} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:enabled:bg-gray-300 dark:hover:enabled:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed" aria-label={t.saveTeam}>
                           <SaveIcon className="h-5 w-5" />
                         </button>
-                        {combatantCount !== 3 && <div className="absolute top-full mt-2 -translate-x-1/2 left-1/2 w-max p-2 text-xs text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none z-20">Can only save teams of 3 combatants.</div>}
+                        {combatantCount !== 3 && <div className="absolute top-full mt-2 -translate-x-1/2 left-1/2 w-max p-2 text-xs text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none z-20">{t.canOnlySave3}</div>}
                       </div>
-                      <button onClick={handleDeletePreset} disabled={presets.length === 0} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:enabled:bg-gray-300 dark:hover:enabled:bg-gray-600 disabled:opacity-50" aria-label="Delete a team preset">
+                      <button onClick={handleDeletePreset} disabled={presets.length === 0} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:enabled:bg-gray-300 dark:hover:enabled:bg-gray-600 disabled:opacity-50" aria-label={t.deletePreset}>
                         <XIcon className="h-5 w-5" />
                       </button>
                     </div>
                     <div className="hidden lg:flex items-center gap-2">
-                      <label htmlFor="text-size-slider" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">Button Text</label>
+                      <label htmlFor="text-size-slider" className="font-bold text-sm text-black dark:text-white whitespace-nowrap">{t.buttonText}</label>
                       <input id="text-size-slider" type="range" min="10" max="16" step="0.5" value={buttonTextSize} onChange={(e) => setButtonTextSize(parseFloat(e.target.value))} className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
                     </div>
                   </div>
                   <div className="hidden sm:flex flex-1 justify-end items-center gap-2">
+                    <button onClick={handleLanguageToggle} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600 text-xs font-bold" aria-label="Toggle language">{language === 'en' ? '中' : 'EN'}</button>
                     <a href="https://github.com/asterah/chaos-full-nightmare" target="_blank" rel="noopener noreferrer" className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600" aria-label="View source on GitHub"><GitHubIcon className="h-5 w-5" /></a>
                     <button onClick={handleThemeToggle} className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-300 dark:hover:bg-gray-600" aria-label="Toggle theme"><ThemeIcon theme={theme} className="h-5 w-5" /></button>
                   </div>
@@ -882,7 +933,7 @@
               </div>
             </div>
             <main className={`w-full mx-auto px-2 sm:px-4 lg:px-6 pb-4 sm:pb-8 grid ${combatantGridClasses[combatantCount]} gap-3 sm:gap-4 lg:gap-6`}>
-              {combatantsHistories.map((historyState, index) => <CombatantLayout key={index} combatantIndex={index} historyState={historyState} onHistoryChange={(newHistory) => handleHistoryChange(index, newHistory)} scoreLimit={scoreLimit} buttonTextSize={buttonTextSize} combatants={COMBATANTS} selectedCombatantId={selectedCombatants[index]} onCharacterChange={handleCharacterChange} totalCombatants={combatantCount} />)}
+              {combatantsHistories.map((historyState, index) => <CombatantLayout key={index} combatantIndex={index} historyState={historyState} onHistoryChange={(newHistory) => handleHistoryChange(index, newHistory)} scoreLimit={scoreLimit} buttonTextSize={buttonTextSize} combatants={COMBATANTS} selectedCombatantId={selectedCombatants[index]} onCharacterChange={handleCharacterChange} totalCombatants={combatantCount} t={t} />)}
             </main>
           </div>
         );
