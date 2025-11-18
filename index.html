@@ -236,12 +236,12 @@
           [CardState.DIVINE_EPIPHANY]: 'border-cyan-500 dark:border-cyan-400 shadow-cyan-500/40 dark:shadow-cyan-400/30 shadow-[0_0_15px]',
         };
         const buttonStyles = {
-          base: 'py-1 sm:py-1.5 rounded-md font-semibold transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-1.5 min-w-0',
+          base: 'w-full py-1.5 rounded-md font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 min-w-0',
           enabled: 'hover:bg-opacity-80',
           disabled: 'opacity-50 cursor-not-allowed',
         };
         const ActionButton = ({ onClick, label, color, icon, textSize, disabled = false, className, showLabel }) => (
-          <button onClick={onClick} disabled={disabled} style={{ fontSize: `${Math.max(textSize * 0.85, 10)}px` }} className={`${buttonStyles.base} ${color} ${ disabled ? buttonStyles.disabled : buttonStyles.enabled } ${showLabel ? 'px-1.5 sm:px-2' : 'px-1 sm:px-1.5'} ${className || ''}`}>
+          <button onClick={onClick} disabled={disabled} style={{ fontSize: `${Math.max(textSize * 0.85, 10)}px` }} className={`${buttonStyles.base} ${color} ${ disabled ? buttonStyles.disabled : buttonStyles.enabled } px-1.5 ${className || ''}`}>
             {icon}
             {showLabel && <span className="min-w-0 truncate text-[10px] sm:text-xs">{label}</span>}
           </button>
