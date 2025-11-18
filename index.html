@@ -201,7 +201,7 @@
       };
 
       // --- From components/CalculatorCard.tsx ---
-      const CalculatorCard = ({ card, score, pointPreviews, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize, t }) => {
+      const CalculatorCard = ({ card, score, pointPreviews, isLast, onUpdate, onRemove, onDuplicate, onConvert, onDiscard, buttonTextSize, t, language }) => {
         const cardRef = React.useRef(null);
         const [isNarrow, setIsNarrow] = React.useState(false);
         React.useEffect(() => {
@@ -273,7 +273,7 @@
           onUpdate({ ...card, state: newState });
         };
         const handleConvert = () => onConvert(card.id);
-        const cardTitle = card.name || (isLast ? 'Ultimate' : card.type);
+        const cardTitle = language === 'zh' ? (card.nameZh || card.name || (isLast ? '终极' : card.type)) : (card.name || (isLast ? 'Ultimate' : card.type));
         const hasImage = !!card.imageUrl;
         const backgroundStyle = hasImage ? { backgroundImage: `url(${card.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {};
         const titleColorStylesWithImage = {
@@ -572,7 +572,7 @@
             <ScoreDisplay score={totalScore} scoreLimit={scoreLimit} onReset={handleReset} onUndo={handleUndo} onRedo={handleRedo} isUndoDisabled={currentIndex === 0} isRedoDisabled={currentIndex >= history.length - 1} isResetDisabled={history.length === 1 && currentIndex === 0} removalCount={removedCards.length} duplicationCount={duplicationCount} t={t} />
             <div className={totalCombatants === 1 ? "lg:grid lg:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] gap-2 sm:gap-3 lg:gap-4" : "contents"}>
               <div className={`grid ${combatantGridClasses} gap-2 sm:gap-3 lg:gap-4`}>
-                {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} t={t} />)}
+                {cards.map((card) => <CalculatorCard key={card.id} card={card} score={calculateCardScore(card, initialCardIds)} pointPreviews={pointPreviews[card.id] || {}} isLast={!!card.isUltimate} onUpdate={handleUpdateCard} onRemove={handleRemoveCard} onDuplicate={handleDuplicateCard} onConvert={handleConvertCard} onDiscard={handleDiscardCard} buttonTextSize={buttonTextSize} t={t} language={language} />)}
                 <div className="aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-600 flex flex-col items-center justify-center p-3 gap-2">
                   <button onClick={() => handleAddCard(CardType.NEUTRAL)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-stone-500 text-white hover:bg-stone-600 dark:bg-stone-600 dark:hover:bg-stone-500" aria-label={t.addNeutral}>{t.addNeutral}</button>
                   <button onClick={() => handleAddCard(CardType.MONSTER)} className="w-full text-center text-sm font-semibold py-2 px-3 rounded-md transition-colors duration-200 bg-purple-600 text-white hover:bg-purple-700" aria-label={t.addMonster}>{t.addMonster}</button>
