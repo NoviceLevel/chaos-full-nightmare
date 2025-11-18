@@ -6,12 +6,13 @@ Future plan if I continue this project:
 - 100% Backup png, change all image to webp to improve speed
 - 100% Impliment ladder count
 - 100% Add redo button
-- ?% Add cookie to remember preset team and so you don't have to manual select combatant everytime
+- 100% Add cookie to remember preset team and so you don't have to manual select combatant everytime (using localStorage)
 - 100% Live calcuation on hover button shat show how much points will be added
 - 100% Add current points of each card
 - 0% Add neutral card database
-- 0% Scale down and fix layout size. Make 3 layout viewable in 1280x720p
-- 0% Mobile friendly/super condense layout
+- 100% Scale down and fix layout size. Make 3 layout viewable in 1280x720p
+- 100% Mobile friendly/super condense layout
+- 100% Card-based hover selection for all selectors (Tier, Combatants, Character, Preset)
 
 **Expansion**
 - Div screen into half, so you can view possible acquireable item/card, and event choice in the current chaos world.
