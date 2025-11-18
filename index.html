@@ -310,10 +310,10 @@
               </div>
               {card.type === CardType.NEUTRAL && (
                 <div className="group absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-20">
-                  <button onClick={() => onDiscard(card.id)} className="p-0.5 bg-gray-600/50 hover:bg-red-600 rounded-full text-white transition-colors" aria-label="Discard Neutral Card">
-                    <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <button onClick={() => onDiscard(card.id)} className="p-0.5 sm:p-1 bg-red-600/80 hover:bg-red-600 rounded-md text-white transition-colors shadow-md" aria-label="Discard Neutral Card">
+                    <XIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </button>
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 w-max max-w-xs p-2 text-xs text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none">
+                  <div className="absolute top-full mt-1 right-0 w-max max-w-[150px] p-1.5 text-[10px] text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none z-30">
                     {t.removeEffectTip}
                   </div>
                 </div>
