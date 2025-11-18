@@ -222,7 +222,7 @@
         }, []);
 
         const cardStyles = {
-          base: 'aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg shadow-lg p-3 flex flex-col justify-between transition-all duration-300 border-2 relative',
+          base: 'aspect-[2/3] w-full max-w-[280px] mx-auto rounded-lg shadow-lg p-2 sm:p-3 flex flex-col justify-between transition-all duration-300 border-2 relative',
           [CardType.BASIC]: 'bg-gray-200 border-gray-300 text-gray-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white',
           [CardType.UNIQUE]: 'bg-blue-200 border-blue-400 text-blue-900 dark:bg-blue-900/50 dark:border-blue-700 dark:text-white',
           [CardType.NEUTRAL]: 'bg-stone-300 border-stone-400 text-stone-900 dark:bg-stone-600 dark:border-stone-500 dark:text-white',
@@ -302,27 +302,27 @@
             <div className={`absolute inset-0 rounded-lg overflow-hidden ${card.isDuplicate ? 'scale-x-[-1]' : ''}`} style={backgroundStyle}>
               {hasImage && <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.8)_0%,transparent_15%,transparent_50%,rgba(0,0,0,0.9)_100%)]"></div>}
             </div>
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div className="absolute top-2 left-2 z-20 flex flex-col items-center gap-1.5">
-                {score > 0 && <div className="bg-gray-900/70 text-white font-bold text-xs rounded-full h-6 w-6 flex items-center justify-center border-2 border-white/50">{score}</div>}
-                {card.state === CardState.EPIPHANY && <EpiphanyIcon className="w-6 h-6 text-yellow-400" style={{ filter: 'drop-shadow(0 1px 2px rgb(0 0 0 / 0.5))' }} />}
-                {card.state === CardState.DIVINE_EPIPHANY && <DivineEpiphanyIcon className="w-6 h-6 text-cyan-400" style={{ filter: 'drop-shadow(0 1px 2px rgb(0 0 0 / 0.5))' }} />}
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="absolute top-1.5 sm:top-2 left-1.5 sm:left-2 z-20 flex flex-col items-center gap-1 sm:gap-1.5">
+                {score > 0 && <div className="bg-gray-900/70 text-white font-bold text-[10px] sm:text-xs rounded-full h-5 w-5 sm:h-6 sm:w-6 flex items-center justify-center border-2 border-white/50">{score}</div>}
+                {card.state === CardState.EPIPHANY && <EpiphanyIcon className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" style={{ filter: 'drop-shadow(0 1px 2px rgb(0 0 0 / 0.5))' }} />}
+                {card.state === CardState.DIVINE_EPIPHANY && <DivineEpiphanyIcon className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" style={{ filter: 'drop-shadow(0 1px 2px rgb(0 0 0 / 0.5))' }} />}
               </div>
               {card.type === CardType.NEUTRAL && (
-                <div className="group absolute top-2 right-2 z-20">
+                <div className="group absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-20">
                   <button onClick={() => onDiscard(card.id)} className="p-0.5 bg-gray-600/50 hover:bg-red-600 rounded-full text-white transition-colors" aria-label="Discard Neutral Card">
-                    <XIcon className="w-4 h-4" />
+                    <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                   <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 w-max max-w-xs p-2 text-xs text-white bg-gray-900/90 dark:bg-black/90 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none">
                     {t.removeEffectTip}
                   </div>
                 </div>
               )}
-              <div className="text-center min-h-[3rem] mt-2">
-                {showLabel && <p className={`font-bold text-sm sm:text-base ${getTitleClassName()}`}>{cardTitle}</p>}
+              <div className="text-center min-h-[2rem] sm:min-h-[3rem] mt-1 sm:mt-2">
+                {showLabel && <p className={`font-bold text-xs sm:text-sm md:text-base ${getTitleClassName()}`}>{cardTitle}</p>}
               </div>
-              <div className="flex-grow my-2 flex items-center justify-center min-h-0"></div>
-              <div className="flex flex-col gap-1 sm:gap-1.5">
+              <div className="flex-grow my-1 sm:my-2 flex items-center justify-center min-h-0"></div>
+              <div className="flex flex-col gap-1 sm:gap-1.5 pb-1">
                 {!isEpiphanyDisabled && (
                   <div className="grid grid-cols-2 gap-1.5">
                     <TooltipActionButton points={pointPreviews.epiphany} label="Epiphany" color="bg-yellow-500 text-black" onClick={() => handleStateChange(CardState.EPIPHANY)} icon={<EpiphanyIcon className="w-4 h-4 flex-shrink-0" />} textSize={buttonTextSize} disabled={isStateLocked} showLabel={showLabel} />
