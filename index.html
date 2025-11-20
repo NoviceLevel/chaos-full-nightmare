@@ -48,7 +48,7 @@
       // --- From constants.ts ---
       const POINTS = {
         NEUTRAL_CARD: 20,
-        UNIQUE_CARD: 80,
+        UNIQUE_CARD: 0,  // 独特卡片不给分（根据参考项目）
         MONSTER_CARD: 80,
         FORBIDDEN_CARD: 20,
         EPIPHANY_BONUS: 10,
@@ -447,7 +447,13 @@
           const cardToConvert = currentGameState.cards.find(c => c.id === cardId);
           if (!cardToConvert) return;
           const updater = (current) => ({
-            cards: current.cards.map(card => card.id === cardId ? { ...card, type: CardType.NEUTRAL, state: CardState.NONE, name: 'Neutral Card' } : card),
+            cards: current.cards.map(card => card.id === cardId ? { 
+              ...card, 
+              type: CardType.NEUTRAL, 
+              originalType: card.originalType || card.type,  // 保留原始类型
+              state: card.state,  // 保留状态（顿悟/神明顿悟）
+              name: 'Neutral Card' 
+            } : card),
             conversionCount: current.conversionCount + 1,
           });
           const desc = language === 'zh' ? `转换${formatCardName(cardToConvert, 'zh')}到中立` : `convert ${formatCardName(cardToConvert)} to Neutral`;
@@ -494,7 +500,13 @@
               previews[card.id].divine = calculateScoreChange(current => ({ cards: current.cards.map(c => c.id === card.id ? { ...c, state: CardState.DIVINE_EPIPHANY } : c) }));
             }
             if (card.type !== CardType.NEUTRAL) {
-              previews[card.id].convert = calculateScoreChange(current => ({ cards: current.cards.map(c => c.id === card.id ? { ...c, type: CardType.NEUTRAL, state: CardState.NONE, name: 'Neutral Card' } : c), conversionCount: current.conversionCount + 1 }));
+              previews[card.id].convert = calculateScoreChange(current => ({ cards: current.cards.map(c => c.id === card.id ? { 
+                ...c, 
+                type: CardType.NEUTRAL, 
+                originalType: c.originalType || c.type,  // 保留原始类型
+                state: c.state,  // 保留状态（顿悟/神明顿悟）
+                name: 'Neutral Card' 
+              } : c), conversionCount: current.conversionCount + 1 }));
             }
             const isDuplicatable = card.type !== CardType.BASIC && !card.effects?.includes(CardEffect.UNIQUE);
             if (isDuplicatable) {
